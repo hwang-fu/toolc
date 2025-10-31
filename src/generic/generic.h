@@ -125,7 +125,7 @@ typedef void* (handler_fn) (void*);
 #endif //
 
 // -------------------------------------------------------------
-// | comparison helpers |
+// | Comparison Helpers |
 // -------------------------------------------------------------
 #ifndef EQ
 #define EQ(o1, o2)                                                  \
@@ -136,5 +136,61 @@ typedef void* (handler_fn) (void*);
 #define NEQ(o1, o2)                                                 \
         ((o1) != (o2))
 #endif // NEQ
+
+// -------------------------------------------------------------
+// | Arithmetic Helpers |
+// -------------------------------------------------------------
+#ifndef ROUNDUP
+/**
+ * ROUNDUP(n, d):
+ *      1. Rounds up `n` to the nearest multiple of `d`.
+ *      2. Useful for alignment or chunked memory blocks.
+ *
+ * ROUNDUP(10, 3) == 4
+ */
+#define ROUNDUP(n, d)                                               \
+        (((n) + (d) - 1) / (d))
+#endif // ROUNDUP
+
+#ifndef WATERMARK
+/**
+ * WATERMARK(used, total):
+ *      1. Calculates the usage ratio as a floating-point value.
+ *      2. Returns a value in [0.0, 1.0] when `used <= total`.
+ */
+#define WATERMARK(used, total)                                      \
+        ((total > 0) ? (f64)(used) / (f64)(total) : (f64) 1.0)
+#define WATERMARK_HIGH  (.7)
+#define WATERMARK_LOW   (.4)
+#endif // WATERMARK
+
+#ifndef INC
+#define INC(n)                                                      \
+    (++(n))
+#endif // INC
+
+#ifndef DEC
+#define DEC(n)                                                      \
+    (--(n))
+#endif // DEC
+
+#ifndef PLUS
+#define PLUS(n, amount)                                             \
+    ((n) + (amount))
+#endif // PLUS
+
+#ifndef MINUS
+#define MINUS(n, amount)                                            \
+    ((n) - (amount))
+#endif // MINUS
+
+#ifndef EPSILON
+// A small enough number.
+#define EPSILON (1e-11)
+#endif // EPSILON
+
+
+
+
 
 
