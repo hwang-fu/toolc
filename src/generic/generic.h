@@ -77,7 +77,7 @@ typedef void* (handler_fn) (void*);
 #endif // HWANGFU_OWNERSHIP
 
 // -------------------------------------------------------------
-// | pointer / REFerence helpers |
+// | pointer / Reference helpers |
 // -------------------------------------------------------------
 #ifndef DEREF
 /**
