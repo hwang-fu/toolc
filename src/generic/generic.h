@@ -42,24 +42,87 @@ typedef void* (handler_fn) (void*);
 // -------------------------------------------------------------
 // | Standard FILE Stream Aliases |
 // -------------------------------------------------------------
-#define cout (stdout)
-#define cin  (stdin)
-#define cerr (stderr)
+#define COUT (stdout)
+#define CIN  (stdin)
+#define CERR (stderr)
 
 // -------------------------------------------------------------
 // | NULL macro |
 // -------------------------------------------------------------
-// Use `nil` as a universal null/zero value.
+// Use `nil` / `NIL` as a universal null/zero value.
+#ifndef nil
 #define nil (0)
+#endif // nil
+#ifndef NIL
+#define NIL (0)
+#endif // NIL
 
 // -------------------------------------------------------------
 // | Ownership Annotations |
 // -------------------------------------------------------------
 // These are semantic markers - useful for documentation, not functionality.
+#ifndef copied
 #define copied
-#define borrowed
-#define owned
+#endif // copied
 
+#ifndef borrowed
+#define borrowed
+#endif // borrowed
+
+#ifndef owned
+#define owned
+#endif // owned
+
+#ifndef COPIED
+#define COPIED
+#endif // COPIED
+
+#ifndef BORROWED
+#define BORROWED
+#endif // BORROWED
+
+#ifndef OWNED
+#define OWNED
+#endif // OWNED
+
+// -------------------------------------------------------------
+// | pointer / REFerence helpers |
+// -------------------------------------------------------------
+#ifndef DEREF
+/**
+ * DEREF(ptr, type):
+ *      DeREFerences a pointer with the expected type.
+ */
+#define DEREF(ptr, type)                                            \
+        (*((type *)(ptr)))
+#endif // DEREF
+
+#ifndef REF
+/**
+ * REF(ptr):
+ *      Get the address of a variable (pass-by-REFerence helper).
+ */
+#define REF(var)                                                    \
+        (&(var))
+#endif //
+
+#ifndef CAST
+/**
+ * CAST(obj, type):
+ *      Explicitly CAST object to type.
+ */
+#define CAST(obj, type)                                             \
+        ((type) (obj))
+#endif //
+
+#ifndef NULLIFY
+/**
+ * NULLIFY(ptr):
+ *      Sets the pointer to nil (zero).
+ */
+#define NULLIFY(ptr)                                                \
+        (ptr) = nil
+#endif //
 
 
 
