@@ -189,6 +189,24 @@ typedef void* (handler_fn) (void*);
 #define EPSILON (1e-11)
 #endif // EPSILON
 
+// -------------------------------------------------------------
+// | Special ASCII Characters |
+// -------------------------------------------------------------
+#ifndef SPECIAL_ASCII_CHARS
+#define SPECIAL_ASCII_CHARS
+#define CR              ("\r")
+#define LF              ("\n")
+#define CRLF            ("\r\n")
+#define TAB             ("\t")
+#define BLANK           (" ")
+#define WHITESPACES     (CRLF TAB BLANK)
+
+#define SPACE           (' ')
+#define HORIZONTAL_TAB  ('\t')
+#define CARRIAGE_RETURN ('\r')
+#define LINE_FEED       ('\n')
+#endif // SPECIAL_ASCII_CHARS
+
 
 
 
