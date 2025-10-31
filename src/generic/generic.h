@@ -124,5 +124,17 @@ typedef void* (handler_fn) (void*);
         (ptr) = nil
 #endif //
 
+// -------------------------------------------------------------
+// | comparison helpers |
+// -------------------------------------------------------------
+#ifndef EQ
+#define EQ(o1, o2)                                                  \
+        ((o1) == (o2))
+#endif // EQ
+
+#ifndef NEQ
+#define NEQ(o1, o2)                                                 \
+        ((o1) != (o2))
+#endif // NEQ
 
 
