@@ -56,3 +56,4 @@ dkms.conf
 
 # customized files
 *.clangd
+*.DS_Store
