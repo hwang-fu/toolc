@@ -9,5 +9,5 @@ all:
 	@find . -type f \( -name "*.c" -o -name "*.h" \) -exec wc -l {} +
 
 clean:
-	rm -rf ${INCLUDE}/*
-	rm -rf ${LIB}/*
+	rm -rf ${INCLUDE}
+	rm -rf ${LIB}
