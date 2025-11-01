@@ -206,11 +206,42 @@ typedef void* (handler_fn) (void*);
 #define MIN3(a, b, c)                                                   \
     ((MIN2(a, b) < (c)) ? (MIN2(a, b)) : (c))
 
+#define MIN4(a, b, c, d)                                                \
+    ((MIN3(a, b, c) < (d)) ? (MIN3(a, b, c)) : (d))
+
+#define MIN5(a, b, c, d, e)                                             \
+    ((MIN4(a, b, c, d) < (e)) ? (MIN4(a, b, c, d)) : (e))
+
+#define MIN6(a, b, c, d, e, f)                                          \
+    ((MIN5(a, b, c, d, e) < (f)) ? (MIN5(a, b, c, d, e)) : (f))
+
+#define MIN7(a, b, c, d, e, f, g)                                       \
+    ((MIN6(a, b, c, d, e, f) < (g)) ? (MIN6(a, b, c, d, e, f)) : (g))
+
+#define MIN8(a, b, c, d, e, f, g, h)                                    \
+    ((MIN7(a, b, c, d, e, f, g) < (h)) ? (MIN7(a, b, c, d, e, f, g)) : (h))
+
+
 #define MAX2(a, b)                                                      \
     (((a) > (b)) ? (a) : (b))
 
 #define MAX3(a, b, c)                                                   \
     ((MAX2(a, b) > (c)) ? (MAX2(a, b)) : (c))
+
+#define MAX4(a, b, c, d)                                                \
+    ((MAX3(a, b, c) > (d)) ? (MAX3(a, b, c)) : (d))
+
+#define MAX5(a, b, c, d, e)                                             \
+    ((MAX4(a, b, c, d) > (e)) ? (MAX4(a, b, c, d)) : (e))
+
+#define MAX6(a, b, c, d, e, f)                                          \
+    ((MAX5(a, b, c, d, e) > (f)) ? (MAX5(a, b, c, d, e)) : (f))
+
+#define MAX7(a, b, c, d, e, f, g)                                       \
+    ((MAX6(a, b, c, d, e, f) > (g)) ? (MAX6(a, b, c, d, e, f)) : (g))
+
+#define MAX8(a, b, c, d, e, f, g, h)                                    \
+    ((MAX7(a, b, c, d, e, f, g) > (h)) ? (MAX7(a, b, c, d, e, f, g)) : (h))
 
 
 #endif // HWANGFU_ARITHMETIC_HELPERS
