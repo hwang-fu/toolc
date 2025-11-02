@@ -192,17 +192,32 @@
  * @author		Junzhe
  * @modified	02.11.2025
  *
- * @brief   Assert that two values are equal.
+ * @brief   Assert that two values are EQual.
  *
- * Uses macro eq() to compare the two operands.
+ * Uses macro EQ() to compare the two operands.
  * If they differ, aborts with an error message with file and line number.
  *
  * @param o1 First operand.
  * @param o2 Second operand.
  */
 #define ASSERT_EQ(o1, o2)                                               \
-        ASSERTF(eq(o1, o2), BOLD "%s" ENDCRAYON " should be equal to " BOLD "%s" ENDCRAYON, #o1, #o2)
+        ASSERTF(EQ(o1, o2), BOLD "%s" ENDCRAYON " should be equal to " BOLD "%s" ENDCRAYON, #o1, #o2)
 
+/**
+ * @since       02.11.2025
+ * @author		Junzhe
+ * @modified	02.11.2025
+ *
+ * @brief       Assert that two operands are not EQual.
+ *
+ * Uses @macro {NEQ()} to compare the two operands.
+ * If they are EQual, aborts with an error message with file and line number.
+ *
+ * @param o1 First operand.
+ * @param o2 Second operand.
+ */
+#define ASSERT_NEQ(o1, o2)                                              \
+        ASSERTF(NEQ(o1, o2), BOLD "%s" ENDCRAYON " should not be equal to " BOLD "%s" ENDCRAYON, #o1, #o2)
 
 
 
