@@ -9,6 +9,19 @@
 
 /**
  * @since       02.11.2025
+ * @author      Junzhe
+ * @modified    02.11.2025
+ *
+ * @brief       Global Assertion Error Output Stream.
+ *
+ * This global variable represents a generic error output
+ * stream used by customized diagnostic and logging functions.
+ * By default, it points to @const {stderr}
+ */
+extern FILE * AssertStream;
+
+/**
+ * @since       02.11.2025
  * @author		Junzhe
  * @modified	02.11.2025
  *
@@ -18,7 +31,7 @@
  * @param line      Line number.
  * @param fmt       printf-style format string.
  */
-void fatal_(borrowed const char * filename, copied const int line, borrowed const char * fmt, ...);
+void fatal_(BORROWED const char * filename, COPIED const int line, BORROWED const char * fmt, ...);
 
 /**
  * @since       02.11.2025
@@ -31,7 +44,7 @@ void fatal_(borrowed const char * filename, copied const int line, borrowed cons
  * @param line      Line number.
  * @param fmt       printf-style format string.
  */
-void errorf_(borrowed const char * filename, copied const int line, borrowed const char * fmt, ...);
+void errorf_(BORROWED const char * filename, COPIED const int line, BORROWED const char * fmt, ...);
 
 /**
  * @since       02.11.2025
@@ -44,7 +57,7 @@ void errorf_(borrowed const char * filename, copied const int line, borrowed con
  * @param line      Line number.
  * @param fmt       printf-style format string.
  */
-void warningf_(borrowed const char * filename, copied const int line, borrowed const char * fmt, ...);
+void warningf_(BORROWED const char * filename, COPIED const int line, BORROWED const char * fmt, ...);
 
 /**
  * @since       02.11.2025
@@ -57,7 +70,7 @@ void warningf_(borrowed const char * filename, copied const int line, borrowed c
  * @param line      Line number.
  * @param fmt       printf-style format string.
  */
-void info_(borrowed const char * filename, copied const int line, borrowed const char * fmt, ...);
+void info_(BORROWED const char * filename, COPIED const int line, BORROWED const char * fmt, ...);
 
 /**
  * @since       02.11.2025
@@ -70,7 +83,7 @@ void info_(borrowed const char * filename, copied const int line, borrowed const
  * @param line      Line number
  * @param fmt       printf-style format string
  */
-void debug_(borrowed const char * filename, copied const int line, borrowed const char * fmt, ...);
+void debug_(BORROWED const char * filename, COPIED const int line, BORROWED const char * fmt, ...);
 
 
 /**
@@ -84,5 +97,5 @@ void debug_(borrowed const char * filename, copied const int line, borrowed cons
  * @param line      Line number
  * @param fmt       printf-style format string
  */
-void tracef_(borrowed const char * filename, copied const int line, borrowed const char * fmt, ...);
+void tracef_(BORROWED const char * filename, COPIED const int line, BORROWED const char * fmt, ...);
 

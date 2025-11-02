@@ -1,10 +1,10 @@
 #include "assertion.h"
 
-FILE * errorstream = nil;
+FILE * AssertStream = nil;
 
 static FILE * get_errorstream_()
 {
-    return errorstream ? errorstream : CERR;
+    return AssertStream ? AssertStream : CERR;
 }
 
 static void space_()
