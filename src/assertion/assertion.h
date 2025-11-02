@@ -44,7 +44,24 @@
 
 /**
  * @since       02.11.2025
- * @author     Junzhe
+ * @author		Junzhe
+ * @modified    02.11.2025
+ *
+ * @brief Print a error message with file and line automatically filled.
+ *
+ * This macro wraps errorf_(), passing the current __FILE__ and __LINE__.
+ * Use it like printf: the first argument is a format string, followed by
+ * optional values. The message is logged as an error but does not abort.
+ *
+ * @param fmt printf-style format string.
+ * @param ... optional arguments for the format string.
+ */
+#define ERRORF(fmt, ...)                                                \
+    errorf_(__FILE__, __LINE__, fmt, ##__VA_ARGS__)
+
+/**
+ * @since       02.11.2025
+ * @author      Junzhe
  * @modified    02.11.2025
  *
  * @brief      Marks unimplemented functions.
