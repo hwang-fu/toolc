@@ -58,6 +58,30 @@
 #define TODO                                                            \
     panic("TODO: %s()", __func__)
 
+/**
+ * @since       02.11.2025
+ * @author		Junzhe
+ * @modified	02.11.2025
+ *
+ * @brief       Assert that an expression is @const {true}
+ *
+ * If the expression evaluates to @const {false}, program aborts with a generic
+ * "Assertion failed" message including the expression string, file, and line number.
+ *
+ * @param expr The expression to evaluate.
+ */
+#define ASSERT_EXPR(expr)                                               \
+    do {                                                                \
+        if (!(expr)) {                                                  \
+            errorf_(                                                    \
+                    __FILE__,                                           \
+                    __LINE__,                                           \
+                    "Assertion failed: " BOLD "%s" ENDCRAYON, #expr);   \
+            exit(EXIT_FAILURE);                                         \
+        }                                                               \
+    } while (0)
+
+
 
 
 /*——————————————————————————————————————————————————————————————————————————————————————————*/
