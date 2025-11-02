@@ -95,6 +95,23 @@
 
 /**
  * @since       02.11.2025
+ * @author		Junzhe
+ * @modified    02.11.2025
+ *
+ * @brief   Print a debug message with file and line automatically filled.
+ *
+ * This macro wraps debug_(), passing the current __FILE__ and __LINE__.
+ * Use it like printf: the first argument is a format string, followed by
+ * optional values. Intended for diagnostic output during development.
+ *
+ * @param fmt printf-style format string.
+ * @param ... optional arguments for the format string.
+ */
+#define DEBUG(fmt, ...)                                                 \
+    debug_(__FILE__, __LINE__, fmt, ##__VA_ARGS__)
+
+/**
+ * @since       02.11.2025
  * @author      Junzhe
  * @modified    02.11.2025
  *
