@@ -20,12 +20,26 @@
  *
  * @param ...   printf-style format string and optional arguments.
  */
-#define fatal(...)                                                      \
+#define FATAL(...)                                                      \
     do {                                                                \
         fatal_(__FILE__, __LINE__, ##__VA_ARGS__);                      \
     } while (0)
 
-
+/**
+ * @modified    09.10.2025
+ * @author      Junzhe
+ *
+ * @brief       Immediately terminate the program with an error.
+ *              Logs the error message (with file and line) using
+ *              @code {errorf_()} and then calls @code {exit(EXIT_FAILURE)}.
+ *
+ * @param ...   printf-style format string and optional arguments.
+ */
+#define PANIC(...)                                                      \
+    do {                                                                \
+        errorf_(__FILE__, __LINE__, ##__VA_ARGS__);                     \
+        exit(EXIT_FAILURE);                                             \
+    } while (0)
 
 /*——————————————————————————————————————————————————————————————————————————————————————————*/
 /*                                      Helper Functions                                    */
