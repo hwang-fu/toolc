@@ -26,8 +26,9 @@
     } while (0)
 
 /**
- * @modified    09.10.2025
+ * @since       02.11.2025
  * @author      Junzhe
+ * @modified    02.11.2025
  *
  * @brief       Immediately terminate the program with an error.
  *              Logs the error message (with file and line) using
@@ -40,6 +41,24 @@
         errorf_(__FILE__, __LINE__, ##__VA_ARGS__);                     \
         exit(EXIT_FAILURE);                                             \
     } while (0)
+
+/**
+ * @since       02.11.2025
+ * @author     Junzhe
+ * @modified    02.11.2025
+ *
+ * @brief      Marks unimplemented functions.
+ *
+ * This macro acts as a placeholder for functionality that is yet to be
+ * implemented. When executed, it calls @func {panic} and terminates the
+ * program, displaying a message that includes the current function name.
+ *
+ * @note The program will exit immediately when this macro is reached.
+ */
+#define TODO                                                            \
+    panic("TODO: %s()", __func__)
+
+
 
 /*——————————————————————————————————————————————————————————————————————————————————————————*/
 /*                                      Helper Functions                                    */
