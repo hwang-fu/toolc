@@ -187,6 +187,21 @@
         }                                                               \
     } while (0)
 
+/**
+ * @since       02.11.2025
+ * @author		Junzhe
+ * @modified	02.11.2025
+ *
+ * @brief   Assert that two values are equal.
+ *
+ * Uses macro eq() to compare the two operands.
+ * If they differ, aborts with an error message with file and line number.
+ *
+ * @param o1 First operand.
+ * @param o2 Second operand.
+ */
+#define ASSERT_EQ(o1, o2)                                               \
+        ASSERTF(eq(o1, o2), BOLD "%s" ENDCRAYON " should be equal to " BOLD "%s" ENDCRAYON, #o1, #o2)
 
 
 
