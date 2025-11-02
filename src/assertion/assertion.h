@@ -61,6 +61,40 @@
 
 /**
  * @since       02.11.2025
+ * @author		Junzhe
+ * @modified    02.11.2025
+ *
+ * @brief Print a warning message with file and line automatically filled.
+ *
+ * This macro wraps warningf_(), passing the current __FILE__ and __LINE__.
+ * Use it like printf: the first argument is a format string, followed by
+ * optional values. The message is logged as a warning but does not abort.
+ *
+ * @param fmt printf-style format string.
+ * @param ... optional arguments for the format string.
+ */
+#define WARNINGF(fmt, ...)                                              \
+    warningf_(__FILE__, __LINE__, fmt, ##__VA_ARGS__)
+
+/**
+ * @since       02.11.2025
+ * @author		Junzhe
+ * @modified    02.11.2025
+ *
+ * @brief Print a informational message with file and line automatically filled.
+ *
+ * This macro wraps info_(), passing the current __FILE__ and __LINE__.
+ * Use it like printf: the first argument is a format string, followed by
+ * optional values. The message is logged as an info but does not abort.
+ *
+ * @param fmt printf-style format string.
+ * @param ... optional arguments for the format string.
+ */
+#define info(fmt, ...)                                                  \
+    info_(__FILE__, __LINE__, fmt, ##__VA_ARGS__)
+
+/**
+ * @since       02.11.2025
  * @author      Junzhe
  * @modified    02.11.2025
  *
