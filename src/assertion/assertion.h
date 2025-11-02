@@ -90,7 +90,7 @@
  * @param fmt printf-style format string.
  * @param ... optional arguments for the format string.
  */
-#define info(fmt, ...)                                                  \
+#define INFO(fmt, ...)                                                  \
     info_(__FILE__, __LINE__, fmt, ##__VA_ARGS__)
 
 /**
