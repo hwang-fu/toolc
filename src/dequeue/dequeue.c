@@ -27,11 +27,6 @@ OWNED Dequeue * mk_dq()
     return dq;
 }
 
-OWNED Dequeue * mk_dq(dispose_fn * cleanup)
-{
-    return mk_dq2(DEQUEUE_DEFAULT_CAPACITY, cleanup);
-}
-
 OWNED Dequeue * mk_dq2(u64 capacity, dispose_fn * cleanup)
 {
     return dq_init(
@@ -51,6 +46,16 @@ arch dq_at(BORROWED Dequeue * dq, u64 idx)
 void dq_pushfront(BORROWED Dequeue * dq, arch value)
 {
     SCP(dq);
+    OWNED Result * result = dq_try_pushfront(dq, value);
+
+    if (EQ(result->Tag, RESULT_FAILURE))
+    {
+        arch err = result->Failure;
+        result->IsUnwrapped = True;
+        result_dispose(result);
+        PANIC("%s(): error code %lu", __func__, err);
+    }
+    result_dispose(result);
 }
 
 void dq_pushback(BORROWED Dequeue * dq, arch value)
@@ -93,18 +98,37 @@ OWNED Result * dq_try_at(BORROWED Dequeue * dq, u64 idx)
     return mk_result(RESULT_SUCCESS, dq->Data[idx]);
 }
 
-bool dq_try_pushfront(BORROWED Dequeue * dq, arch value)
+OWNED Result * dq_try_pushfront(BORROWED Dequeue * dq, arch value)
 {
-    SCP(dq);
     if (!dq)
     {
-        return False;
+        return mk_result(RESULT_FAILURE, 0);
     }
+
+    u64 capacity = dq->Capacity;
+    u64 size     = dq->Size;
+    if (WATERMARK(size, capacity) >= WATERMARK_HIGH)
+    {
+        do
+        {
+            capacity += 1;
+            capacity *= 2;
+        } while (WATERMARK(size, capacity) >= WATERMARK_LOW);
+
+        if (!dq_try_fit(dq, capacity))
+        {
+            return mk_result(RESULT_FAILURE, 1);
+        }
+    }
+
+    memmove(dq->Data + 1, dq->Data + 0, dq->Size++ * sizeof(arch));
+    dq->Data[0] = value;
+
+    return mk_result(RESULT_SUCCESS, 0);
 }
 
-bool dq_try_pushback(BORROWED Dequeue * dq, arch value)
+OWNED Result * dq_try_pushback(BORROWED Dequeue * dq, arch value)
 {
-    SCP(dq);
     if (!dq)
     {
         return False;
@@ -208,7 +232,7 @@ COPIED void * dq_dispose(OWNED void * arg)
     u64 size = dq->Size;
     if (dq->Dispose)
     {
-        disose_fn * cleanup = dq->Dispose;
+        dispose_fn * cleanup = dq->Dispose;
         for (u64 i = 0; i < size; i++)
         {
             cleanup(CAST(dq->Data[i], void*));
