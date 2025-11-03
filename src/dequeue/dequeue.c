@@ -50,26 +50,32 @@ arch dq_at(BORROWED Dequeue * dq, u64 idx)
 
 void dq_pushfront(BORROWED Dequeue * dq, arch value)
 {
+    SCP(dq);
 }
 
 void dq_pushback(BORROWED Dequeue * dq, arch value)
 {
+    SCP(dq);
 }
 
 arch dq_front(BORROWED Dequeue * dq)
 {
+    SCP(dq);
 }
 
 arch dq_back(BORROWED Dequeue * dq)
 {
+    SCP(dq);
 }
 
 arch dq_popfront(BORROWED Dequeue * dq)
 {
+    SCP(dq);
 }
 
 arch dq_popback(BORROWED Dequeue * dq)
 {
+    SCP(dq);
 }
 
 OWNED Result * dq_try_at(BORROWED Dequeue * dq, u64 idx)
@@ -85,6 +91,72 @@ OWNED Result * dq_try_at(BORROWED Dequeue * dq, u64 idx)
     }
 
     return mk_result(RESULT_SUCCESS, dq->Data[idx]);
+}
+
+bool dq_try_pushfront(BORROWED Dequeue * dq, arch value)
+{
+}
+
+bool dq_try_pushback(BORROWED Dequeue * dq, arch value)
+{
+}
+
+OWNED Result * dq_try_front(BORROWED Dequeue * dq)
+{
+}
+
+OWNED Result * dq_try_back(BORROWED Dequeue * dq)
+{
+}
+
+OWNED Result * dq_try_popfront(BORROWED Dequeue * dq)
+{
+}
+
+OWNED Result * dq_try_popback(BORROWED Dequeue * dq)
+{
+}
+
+u64 dq_get_size(BORROWED Dequeue * dq)
+{
+}
+
+OWNED Result * dq_try_get_size(BORROWED Dequeue * dq)
+{
+}
+
+u64 dq_get_capacity(BORROWED Dequeue * dq)
+{
+}
+
+OWNED Result * dq_try_get_capacity(BORROWED Dequeue * dq)
+{
+}
+
+void dq_fit(BORROWED Dequeue * dq, u64 newCapacity)
+{
+}
+
+bool dq_try_fit(BORROWED Dequeue * dq, u64 newCapacity)
+{
+}
+
+bool dq_is_empty(BORROWED Dequeue * dq)
+{
+    if (!dq)
+    {
+        return False;
+    }
+
+    return EQ(dq->Size, 0);
+}
+
+void dq_apply_at(BORROWED Dequeue * dq, u64 idx, dq_apply_fn * apply)
+{
+}
+
+bool dq_try_apply_at(BORROWED Dequeue * dq, u64 idx, dq_apply_fn * apply)
+{
 }
 
 COPIED void * dq_dispose(OWNED void * arg)
