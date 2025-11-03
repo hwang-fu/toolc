@@ -1,7 +1,12 @@
 #pragma once
 
+#include <stdlib.h>
+#include <string.h>
+
 #include "hwangfu/generic.h"
 #include "hwangfu/result.h"
+#include "hwangfu/memory.h"
+#include "hwangfu/assertion.h"
 
 #ifndef DEQUEUE_DEFAULT_CAPACITY
 #define DEQUEUE_DEFAULT_CAPACITY (20)
@@ -9,7 +14,6 @@
 
 typedef struct Dequeue Dequeue;
 typedef arch (dq_apply_fn) (arch);
-typedef OWNED Result * (dq_iter_fn) (arch);
 
 /**
  * @since       03.11.2025
@@ -221,7 +225,6 @@ void dq_apply_at(BORROWED Dequeue * dq, u64 idx, dq_apply_fn * apply);
  *              If @param {dq} is @const {NIL} or @param {idx} is out of range, return @const {False}.
  */
 bool dq_try_apply_at(BORROWED Dequeue * dq, u64 idx, dq_apply_fn * apply);
-
 
 /**
  * @since       03.11.2025
