@@ -1,6 +1,4 @@
 #include "result.h"
-#include "generic.h"
-#include "assertion.h"
 
 void result_init_(BORROWED Result * result, TResult tag, arch value)
 {
