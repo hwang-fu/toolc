@@ -1,4 +1,6 @@
 #include "result.h"
+#include "generic.h"
+#include "assertion.h"
 
 void result_init_(BORROWED Result * result, TResult tag, arch value)
 {
@@ -26,7 +28,7 @@ void result_init_(BORROWED Result * result, TResult tag, arch value)
 
 OWNED Result * mk_result(TResult tag, arch value)
 {
-    OWNED Result * res = new(sizeof(Result));
+    OWNED Result * res = NEW(sizeof(Result));
     result_init_(res, tag, value);
     return res;
 }
@@ -44,8 +46,12 @@ OWNED Result * mk_result_failure(arch failure)
 arch result_unwrap(BORROWED Result * result)
 {
     SCP(result);
-    ASSERT_EXPR(result->IsUnwrapped, "%s(): Result is already unwrapped.", __func__);
-    switch (tag)
+    if (result->IsUnwrapped)
+    {
+        PANIC("%s(): Result is already unwrapped.", __func__);
+    }
+
+    switch (result->Tag)
     {
         case RESULT_SUCCESS:
         {
@@ -59,7 +65,7 @@ arch result_unwrap(BORROWED Result * result)
 
         default:
         {
-            PANIC("%s(): Unknown TResult value %d", __func__, tag);
+            PANIC("%s(): Unknown TResult value %d", __func__, result->Tag);
         } break;
     }
 }
@@ -67,8 +73,12 @@ arch result_unwrap(BORROWED Result * result)
 arch result_unwrap_else(BORROWED Result * result, arch alternative)
 {
     SCP(result);
-    ASSERT_EXPR(result->IsUnwrapped, "%s(): Result is already unwrapped.", __func__);
-    switch (tag)
+    if (result->IsUnwrapped)
+    {
+        PANIC("%s(): Result is already unwrapped.", __func__);
+    }
+
+    switch (result->Tag)
     {
         case RESULT_SUCCESS:
         {
@@ -82,7 +92,7 @@ arch result_unwrap_else(BORROWED Result * result, arch alternative)
 
         default:
         {
-            PANIC("%s(): Unknown TResult value %d", __func__, tag);
+            PANIC("%s(): Unknown TResult value %d", __func__, result->Tag);
         } break;
     }
 }
@@ -90,10 +100,13 @@ arch result_unwrap_else(BORROWED Result * result, arch alternative)
 arch result_unwrap_owned(OWNED Result * result)
 {
     SCP(result);
-    ASSERT_EXPR(result->IsUnwrapped, "%s(): Result is already unwrapped.", __func__);
+    if (result->IsUnwrapped)
+    {
+        PANIC("%s(): Result is already unwrapped.", __func__);
+    }
 
     arch value;
-    switch (tag)
+    switch (result->Tag)
     {
         case RESULT_SUCCESS:
         {
@@ -107,7 +120,7 @@ arch result_unwrap_owned(OWNED Result * result)
 
         default:
         {
-            PANIC("%s(): Unknown TResult value %d", __func__, tag);
+            PANIC("%s(): Unknown TResult value %d", __func__, result->Tag);
         } break;
     }
 
@@ -120,10 +133,13 @@ arch result_unwrap_owned(OWNED Result * result)
 arch result_unwrap_else_owned(OWNED Result * result, arch alternative)
 {
     SCP(result);
-    ASSERT_EXPR(result->IsUnwrapped, "%s(): Result is already unwrapped.", __func__);
+    if (result->IsUnwrapped)
+    {
+        PANIC("%s(): Result is already unwrapped.", __func__);
+    }
 
     arch value;
-    switch (tag)
+    switch (result->Tag)
     {
         case RESULT_SUCCESS:
         {
@@ -137,7 +153,7 @@ arch result_unwrap_else_owned(OWNED Result * result, arch alternative)
 
         default:
         {
-            PANIC("%s(): Unknown TResult value %d", __func__, tag);
+            PANIC("%s(): Unknown TResult value %d", __func__, result->Tag);
         } break;
     }
 
