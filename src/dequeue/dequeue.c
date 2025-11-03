@@ -95,46 +95,83 @@ OWNED Result * dq_try_at(BORROWED Dequeue * dq, u64 idx)
 
 bool dq_try_pushfront(BORROWED Dequeue * dq, arch value)
 {
+    SCP(dq);
+    if (!dq)
+    {
+        return False;
+    }
 }
 
 bool dq_try_pushback(BORROWED Dequeue * dq, arch value)
 {
+    SCP(dq);
+    if (!dq)
+    {
+        return False;
+    }
 }
 
 OWNED Result * dq_try_front(BORROWED Dequeue * dq)
 {
+    if (!dq)
+    {
+        return mk_result(RESULT_FAILURE, 0);
+    }
 }
 
 OWNED Result * dq_try_back(BORROWED Dequeue * dq)
 {
+    if (!dq)
+    {
+        return mk_result(RESULT_FAILURE, 0);
+    }
 }
 
 OWNED Result * dq_try_popfront(BORROWED Dequeue * dq)
 {
+    if (!dq)
+    {
+        return mk_result(RESULT_FAILURE, 0);
+    }
 }
 
 OWNED Result * dq_try_popback(BORROWED Dequeue * dq)
 {
+    if (!dq)
+    {
+        return mk_result(RESULT_FAILURE, 0);
+    }
 }
 
 u64 dq_get_size(BORROWED Dequeue * dq)
 {
+    SCP(dq);
 }
 
 OWNED Result * dq_try_get_size(BORROWED Dequeue * dq)
 {
+    if (!dq)
+    {
+        return mk_result(RESULT_FAILURE, 0);
+    }
 }
 
 u64 dq_get_capacity(BORROWED Dequeue * dq)
 {
+    SCP(dq);
 }
 
 OWNED Result * dq_try_get_capacity(BORROWED Dequeue * dq)
 {
+    if (!dq)
+    {
+        return mk_result(RESULT_FAILURE, 0);
+    }
 }
 
 void dq_fit(BORROWED Dequeue * dq, u64 newCapacity)
 {
+    SCP(dq);
 }
 
 bool dq_try_fit(BORROWED Dequeue * dq, u64 newCapacity)
