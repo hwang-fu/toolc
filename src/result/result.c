@@ -21,7 +21,7 @@ void result_init_(BORROWED Result * result, TResult tag, arch value)
     }
 
     result->Tag         = tag;
-    result->IsUnwrapped = True;
+    result->IsUnwrapped = False;
 }
 
 OWNED Result * mk_result(TResult tag, arch value)
