@@ -134,3 +134,18 @@ bool cstr_ends_with(BORROWED const char * s, BORROWED const char * suffix)
 {
 }
 
+bool cstr_ends_with_owned(BORROWED const char * s, OWNED char * suffix)
+{
+}
+
+char cstr_at(BORROWED const char * s, u64 idx)
+{
+    if (strlen_safe(s) <= idx)
+    {
+        PANIC("%s(): index %lu out of range for \"%s\".",
+                __func__,
+                idx,
+                s);
+    }
+    return s[idx];
+}
