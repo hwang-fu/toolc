@@ -3,6 +3,9 @@ CC 		:= clang
 CFLAGS 	:= -Wall
 CFLAGS 	+= -O2
 CFLAGS 	+= -fPIC
+CFLAGS  += -std=c23
+
+LFLAGS 	:=
 
 AR 		:= ar
 ARFLAGS := rcs
@@ -32,9 +35,5 @@ $(BUILD)/%.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -rf $(LIB)/*
-	rm -rf $(BUILD)/*
-
-
-
-
+	rm -rf $(LIB)
+	rm -rf $(BUILD)
