@@ -13,7 +13,7 @@ u64 strlen_safe(BORROWED const char * s)
 bool strcmp_safe_ignorecase(BORROWED const char * s1, BORROWED const char * s2)
 {
     /// 1. if points to the same memory / both @const {NIL}, definitely same.
-    if (s1 == s2)
+    if (EQ(s1, s2))
     {
         return True;
     }
@@ -41,7 +41,7 @@ bool strncmp_safe_ignorecase(BORROWED const char * s1, BORROWED const char * s2,
     }
 
     /// 2. if points to the same memory / both @const {NIL}, definitely same.
-    if (s1 == s2)
+    if (EQ(s1, s2))
     {
         return True;
     }
@@ -66,7 +66,7 @@ bool strcmp_safe(BORROWED const char * s1, BORROWED const char * s2)
     return strcmp_safe_ignorecase(s1, s2);
 #else
     /// 1. if points to the same memory / both @const {NIL}, definitely same.
-    if (s1 == s2)
+    if (EQ(s1, s2))
     {
         return True;
     }
@@ -93,7 +93,7 @@ bool strncmp_safe(BORROWED const char * s1, BORROWED const char * s2, u64 length
     }
 
     /// 2. if points to the same memory / both @const {NIL}, definitely same.
-    if (s1 == s2)
+    if (EQ(s1, s2))
     {
         return True;
     }
@@ -122,20 +122,71 @@ OWNED char * strdup_safe(BORROWED const char * s)
     return duplicated;
 }
 
+bool cstr_starts_with_owned(BORROWED const char * s, OWNED char * prefix)
+{
+    bool result = cstr_starts_with(s, prefix);
+    XFREE(prefix);
+    return result;
+}
+
 bool cstr_starts_with_ignorecase(BORROWED const char * s, BORROWED const char * prefix)
 {
+    if (EQ(s, prefix))
+    {
+        return True;
+    }
 }
 
 bool cstr_starts_with(BORROWED const char * s, BORROWED const char * prefix)
 {
-}
+    if (EQ(s, prefix))
+    {
+        return True;
+    }
 
-bool cstr_ends_with(BORROWED const char * s, BORROWED const char * suffix)
-{
+    if (!s || !prefix)
+    {
+        return False;
+    }
+
+    u64 len1 = strlen_safe(s);
+    u64 len2 = strlen_safe(prefix);
+
+    if (len1 < len2)
+    {
+        return False;
+    }
+
+    // @const {""} is the prefix for any string.
+    if (prefix && EQ(len2, 0))
+    {
+        return True;
+    }
+
+    return EQ(0, memcmp(s, prefix, len2));
 }
 
 bool cstr_ends_with_owned(BORROWED const char * s, OWNED char * suffix)
 {
+    bool result = cstr_ends_with(s, suffix);
+    XFREE(suffix);
+    return result;
+}
+
+bool cstr_ends_with_ignorecase(BORROWED const char * s, BORROWED const char * suffix)
+{
+    if (EQ(s, suffix))
+    {
+        return True;
+    }
+}
+
+bool cstr_ends_with(BORROWED const char * s, BORROWED const char * suffix)
+{
+    if (EQ(s, suffix))
+    {
+        return True;
+    }
 }
 
 char cstr_at(BORROWED const char * s, u64 idx)
