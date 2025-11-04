@@ -81,7 +81,6 @@ bool strncmp_safe_ignorecase(BORROWED const char * s1, BORROWED const char * s2,
  */
 OWNED char * strdup_safe(BORROWED const char * s)
 
-
 /**
  * @since       04.11.2025
  * @author      Junzhe
