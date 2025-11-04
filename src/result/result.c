@@ -7,7 +7,6 @@ OWNED Result * result_init_(OWNED Result * result, TResult tag, arch value)
         result = NEW(sizeof(Result));
     }
 
-    result->Tag = tag;
     switch (tag)
     {
         case RESULT_SUCCESS:
@@ -25,6 +24,9 @@ OWNED Result * result_init_(OWNED Result * result, TResult tag, arch value)
             PANIC("%s(): Unknown TResult value %d", __func__, tag);
         } break;
     }
+    result->Tag = tag;
+
+    return result;
 }
 
 OWNED Result * mk_result(TResult tag, arch value)
