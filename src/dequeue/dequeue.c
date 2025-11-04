@@ -396,6 +396,7 @@ OWNED Result * dq_try_get_size(BORROWED Dequeue * dq)
 u64 dq_get_capacity(BORROWED Dequeue * dq)
 {
     SCP(dq);
+    return dq->Capacity;
 }
 
 OWNED Result * dq_try_get_capacity(BORROWED Dequeue * dq)
@@ -404,6 +405,8 @@ OWNED Result * dq_try_get_capacity(BORROWED Dequeue * dq)
     {
         return RESULT_FAIL(0);
     }
+
+    return RESULT_SUCCEED(dq->Capacity);
 }
 
 void dq_fit(BORROWED Dequeue * dq, u64 newCapacity)
