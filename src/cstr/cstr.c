@@ -263,3 +263,32 @@ char cstr_at(BORROWED const char * s, u64 idx)
     }
     return s[idx];
 }
+
+OWNED char * mk_cstr(BORROWED const char * s1, BORROWED const char * s2)
+{
+    const u64 len1 = strlen_safe(s1);
+    const u64 len2 = strlen_safe(s2);
+    const u64 total = len1 + len2;
+
+    if (EQ(total, 0))
+    {
+        return strdup_safe("");
+    }
+
+    if (EQ(len1, 0))
+    {
+        return strdup_safe(s2);
+    }
+
+    if (EQ(len2, 0))
+    {
+        return strdup_safe(s1);
+    }
+
+    OWNED char * s = NEW((total + 1) * sizeof(char));
+    memcpy(s,        s1, len1);
+    memcpy(s + len1, s2, len2);
+    s[total] = '\0';
+
+    return s;
+}
