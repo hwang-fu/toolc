@@ -45,7 +45,7 @@ arch dq_at(BORROWED Dequeue * dq, u64 idx)
     {
         case 0:
         {
-            PANIC("%s(): NIL argument.", __func__);
+            PANIC("%s(): NIL dq argument.", __func__);
         } break;
 
         case 1:
@@ -75,7 +75,7 @@ void dq_pushfront(BORROWED Dequeue * dq, arch data)
     {
         case 0:
         {
-            PANIC("%s(): NIL argument.", __func__);
+            PANIC("%s(): NIL dq argument.", __func__);
         } break;
 
         case 1:
@@ -107,7 +107,7 @@ void dq_pushback(BORROWED Dequeue * dq, arch data)
     {
         case 0:
         {
-            PANIC("%s(): NIL argument.", __func__);
+            PANIC("%s(): NIL dq argument.", __func__);
         } break;
 
         case 1:
@@ -138,7 +138,7 @@ arch dq_front(BORROWED Dequeue * dq)
     {
         case 0:
         {
-            PANIC("%s(): NIL argument.", __func__);
+            PANIC("%s(): NIL dq argument.", __func__);
         } break;
 
         case 1:
@@ -167,7 +167,7 @@ arch dq_back(BORROWED Dequeue * dq)
     {
         case 0:
         {
-            PANIC("%s(): NIL argument.", __func__);
+            PANIC("%s(): NIL dq argument.", __func__);
         } break;
 
         case 1:
@@ -196,7 +196,7 @@ arch dq_popfront(BORROWED Dequeue * dq)
     {
         case 0:
         {
-            PANIC("%s(): NIL argument.", __func__);
+            PANIC("%s(): NIL dq argument.", __func__);
         } break;
 
         case 1:
@@ -225,7 +225,7 @@ arch dq_popback(BORROWED Dequeue * dq)
     {
         case 0:
         {
-            PANIC("%s(): NIL argument.", __func__);
+            PANIC("%s(): NIL dq argument.", __func__);
         } break;
 
         case 1:
@@ -252,7 +252,7 @@ OWNED Result * dq_try_at(BORROWED Dequeue * dq, u64 idx)
         return RESULT_FAIL(1);
     }
 
-    return mk_result(RESULT_SUCCESS, dq->Elements[idx]);
+    return RESULT_SUCCEED(dq->Elements[idx]);
 }
 
 OWNED Result * dq_try_pushfront(BORROWED Dequeue * dq, arch data)
@@ -412,7 +412,6 @@ OWNED Result * dq_try_get_capacity(BORROWED Dequeue * dq)
 void dq_fit(BORROWED Dequeue * dq, u64 newCapacity)
 {
     OWNED Result * result = dq_try_fit(dq, newCapacity);
-
     if (RESULT_GOOD(result))
     {
         result_dispose(result);
@@ -425,7 +424,7 @@ void dq_fit(BORROWED Dequeue * dq, u64 newCapacity)
     {
         case 0:
         {
-            PANIC("%s(): NIL argument.", __func__);
+            PANIC("%s(): NIL dq argument.", __func__);
         } break;
 
         case 1:
@@ -475,10 +474,61 @@ bool dq_is_empty(BORROWED Dequeue * dq)
 
 void dq_apply_at(BORROWED Dequeue * dq, u64 idx, dq_apply_fn * apply)
 {
+    OWNED Result * result = dq_try_apply_at(dq, idx, apply);
+    if (RESULT_GOOD(result))
+    {
+        result_dispose(result);
+        goto dq_apply_exit_;
+    }
+
+    u64 errcode = (u64) result->Failure;
+    result_dispose(result);
+    switch (errcode)
+    {
+        case 0:
+        {
+            PANIC("%s(): NIL dq argument.", __func__);
+        } break;
+
+        case 1:
+        {
+            PANIC("%s(): idx %lu is out of range [0, %lu].", __func__, idx, dq->Size-1);
+        } break;
+
+        case 2:
+        {
+            PANIC("%s(): NIL apply function.", __func__);
+        } break;
+
+        default:
+        {
+            PANIC("%s(): Unknown error.", __func__);
+        } break;
+    }
+
+dq_apply_exit_:
 }
 
 OWNED Result * dq_try_apply_at(BORROWED Dequeue * dq, u64 idx, dq_apply_fn * apply)
 {
+    if (!dq)
+    {
+        return RESULT_FAIL(0);
+    }
+
+    if (dq->Size <= idx)
+    {
+        return RESULT_FAIL(1);
+    }
+
+    if (!apply)
+    {
+        return RESULT_FAIL(2);
+    }
+
+    dq->Elements[idx] = apply(dq->Elements[idx]);
+
+    return RESULT_SUCCEED(0);
 }
 
 COPIED void * dq_dispose(OWNED void * arg)
