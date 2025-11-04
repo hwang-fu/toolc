@@ -187,6 +187,27 @@ bool cstr_ends_with(BORROWED const char * s, BORROWED const char * suffix)
     {
         return True;
     }
+
+    if (!s || !suffix)
+    {
+        return False;
+    }
+
+    u64 len1 = strlen_safe(s);
+    u64 len2 = strlen_safe(suffix);
+
+    if (len1 < len2)
+    {
+        return False;
+    }
+
+    // @const {""} is the suffix for any string.
+    if (suffix && EQ(len2, 0))
+    {
+        return True;
+    }
+
+    return EQ(0, memcmp(s, suffix, len2));
 }
 
 char cstr_at(BORROWED const char * s, u64 idx)
