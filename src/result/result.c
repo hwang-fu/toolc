@@ -1,7 +1,12 @@
 #include "result.h"
 
-void result_init_(BORROWED Result * result, TResult tag, arch value)
+OWNED Result * result_init_(OWNED Result * result, TResult tag, arch value)
 {
+    if (!result)
+    {
+        result = NEW(sizeof(Result));
+    }
+
     switch (tag)
     {
         case RESULT_SUCCESS:
@@ -19,16 +24,14 @@ void result_init_(BORROWED Result * result, TResult tag, arch value)
             PANIC("%s(): Unknown TResult value %d", __func__, tag);
         } break;
     }
+    result->Tag = tag;
 
-    result->Tag         = tag;
-    result->IsUnwrapped = False;
+    return result;
 }
 
 OWNED Result * mk_result(TResult tag, arch value)
 {
-    OWNED Result * res = NEW(sizeof(Result));
-    result_init_(res, tag, value);
-    return res;
+    return result_init_(NIL, tag, value);
 }
 
 OWNED Result * mk_result_success(arch success)
@@ -41,14 +44,9 @@ OWNED Result * mk_result_failure(arch failure)
     return mk_result(RESULT_FAILURE, failure);
 }
 
-arch result_unwrap(BORROWED Result * result)
+arch result_unwrap(BORROWED Result * result, result_callback_fn * onerr)
 {
     SCP(result);
-    if (result->IsUnwrapped)
-    {
-        PANIC("%s(): Result is already unwrapped.", __func__);
-    }
-
     switch (result->Tag)
     {
         case RESULT_SUCCESS:
@@ -58,7 +56,11 @@ arch result_unwrap(BORROWED Result * result)
 
         case RESULT_FAILURE:
         {
-            PANIC("%s(): Result is failed with error message \"%s\"", __func__, CAST(result->Failure, char*));
+            if (!onerr)
+            {
+                PANIC("%s(): Result is failed with error code %lu", __func__, result->Failure);
+            }
+            return onerr(result->Failure);
         } break;
 
         default:
@@ -71,11 +73,6 @@ arch result_unwrap(BORROWED Result * result)
 arch result_unwrap_else(BORROWED Result * result, arch alternative)
 {
     SCP(result);
-    if (result->IsUnwrapped)
-    {
-        PANIC("%s(): Result is already unwrapped.", __func__);
-    }
-
     switch (result->Tag)
     {
         case RESULT_SUCCESS:
@@ -95,14 +92,9 @@ arch result_unwrap_else(BORROWED Result * result, arch alternative)
     }
 }
 
-arch result_unwrap_owned(OWNED Result * result)
+arch result_unwrap_owned(OWNED Result * result, result_callback_fn * onerr)
 {
     SCP(result);
-    if (result->IsUnwrapped)
-    {
-        PANIC("%s(): Result is already unwrapped.", __func__);
-    }
-
     arch value;
     switch (result->Tag)
     {
@@ -113,7 +105,11 @@ arch result_unwrap_owned(OWNED Result * result)
 
         case RESULT_FAILURE:
         {
-            PANIC("%s(): Result is failed with error message \"%s\"", __func__, CAST(result->Failure, char*));
+            if (!onerr)
+            {
+                PANIC("%s(): Result is failed with error code %lu", __func__, result->Failure);
+            }
+            value = onerr(result->Failure);
         } break;
 
         default:
@@ -122,7 +118,6 @@ arch result_unwrap_owned(OWNED Result * result)
         } break;
     }
 
-    result->IsUnwrapped = True;
     result_dispose(result);
 
     return value;
@@ -131,11 +126,6 @@ arch result_unwrap_owned(OWNED Result * result)
 arch result_unwrap_else_owned(OWNED Result * result, arch alternative)
 {
     SCP(result);
-    if (result->IsUnwrapped)
-    {
-        PANIC("%s(): Result is already unwrapped.", __func__);
-    }
-
     arch value;
     switch (result->Tag)
     {
@@ -155,7 +145,6 @@ arch result_unwrap_else_owned(OWNED Result * result, arch alternative)
         } break;
     }
 
-    result->IsUnwrapped = True;
     result_dispose(result);
 
     return value;
@@ -167,11 +156,6 @@ COPIED void * result_dispose(OWNED void * arg)
     {
         return NIL;
     }
-
     OWNED Result * res = CAST(arg, Result*);
-    if (!res->IsUnwrapped)
-    {
-        PANIC("%s(): Result is not unwrapped before disposal.", __func__);
-    }
     return dispose(res);
 }

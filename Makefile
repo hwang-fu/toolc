@@ -1,15 +1,16 @@
 
-INCLUDE := ./include
-LIB		:= ./lib
+HWANGFU := ./hwangfu/
 
-.PHONY: all clean test
+.PHONY: update build clean test
 
-all:
+update:
+	${MAKE} clean && ${MAKE} build
+
+build:
 	@./script/build.sh
 	@echo
 	@echo
 	@find . -type f \( -name "*.c" -o -name "*.h" \) -exec wc -l {} +
 
 clean:
-	rm -rf ${INCLUDE}
-	rm -rf ${LIB}
+	rm -rf ${HWANGFU}/*

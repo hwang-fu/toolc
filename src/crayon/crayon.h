@@ -2,7 +2,7 @@
 
 #include <stdio.h>
 
-#include "generic.h"
+#include "hwangfu/generic.h"
 
 #define BOLD                "\033[1m"
 #define DIM                 "\033[2m"

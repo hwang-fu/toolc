@@ -2,8 +2,8 @@
 
 #include <stdlib.h>
 
-#include "generic.h"
-#include "assertion.h"
+#include "hwangfu/generic.h"
+#include "hwangfu/assertion.h"
 
 // -------------------------------------------------------------
 // | Memory Safety Allocator Macros|
@@ -36,11 +36,10 @@
         zeros_( n )
 
 
-
-
 // -------------------------------------------------------------
 // | Memory Allocation Helpers |
 // -------------------------------------------------------------
 OWNED void * new_(COPIED u64 bytes);
 OWNED void * zeros_(COPIED u64 bytes);
+OWNED void * realloc_safe(OWNED void * arg, COPIED u64 newSizeInBytes);
 COPIED void * dispose(OWNED void * arg);
