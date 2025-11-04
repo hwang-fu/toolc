@@ -11,7 +11,7 @@ OWNED Dequeue * dq_init(OWNED Dequeue * dq, u64 capacity, dispose_fn * cleanup)
 
     dq->Capacity      = capacity;
     dq->Size          = 0;
-    dq->Data          = NEW(capacity * sizeof(arch));
+    dq->Elements          = NEW(capacity * sizeof(arch));
     dq->Dispose       = cleanup;
 
     return dq;
@@ -35,7 +35,7 @@ arch dq_at(BORROWED Dequeue * dq, u64 idx)
 {
     SCP(dq);
     ASSERT_EXPR(dq->Size > idx);
-    return dq->Data[idx];
+    return dq->Elements[idx];
 }
 
 void dq_pushfront(BORROWED Dequeue * dq, arch value)
@@ -43,14 +43,6 @@ void dq_pushfront(BORROWED Dequeue * dq, arch value)
     SCP(dq);
 
     OWNED Result * result = dq_try_pushfront(dq, value);
-    if (EQ(result->Tag, RESULT_FAILURE))
-    {
-        arch err = result->Failure;
-        result->IsUnwrapped = True;
-        result_dispose(result);
-        PANIC("%s(): error code %lu", __func__, err);
-    }
-    result_dispose(result);
 }
 
 void dq_pushback(BORROWED Dequeue * dq, arch value)
@@ -90,14 +82,14 @@ OWNED Result * dq_try_at(BORROWED Dequeue * dq, u64 idx)
         return mk_result(RESULT_FAILURE, 1);
     }
 
-    return mk_result(RESULT_SUCCESS, dq->Data[idx]);
+    return mk_result(RESULT_SUCCESS, dq->Elements[idx]);
 }
 
 OWNED Result * dq_try_pushfront(BORROWED Dequeue * dq, arch value)
 {
     if (!dq)
     {
-        return mk_result(RESULT_FAILURE, 0);
+        return RESULT_FAIL(0);
     }
 
     u64 capacity = dq->Capacity;
@@ -112,14 +104,14 @@ OWNED Result * dq_try_pushfront(BORROWED Dequeue * dq, arch value)
 
         if (!dq_try_fit(dq, capacity))
         {
-            return mk_result(RESULT_FAILURE, 1);
+            return RESULT_FAIL(1);
         }
     }
 
-    memmove(dq->Data + 1, dq->Data + 0, dq->Size++ * sizeof(arch));
-    dq->Data[0] = value;
+    memmove(dq->Elements + 1, dq->Elements + 0, dq->Size++ * sizeof(arch));
+    dq->Elements[0] = value;
 
-    return mk_result(RESULT_SUCCESS, 0);
+    return RESULT_SUCCEED(0);
 }
 
 OWNED Result * dq_try_pushback(BORROWED Dequeue * dq, arch value)
@@ -230,10 +222,10 @@ COPIED void * dq_dispose(OWNED void * arg)
         dispose_fn * cleanup = dq->Dispose;
         for (u64 i = 0; i < size; i++)
         {
-            cleanup(CAST(dq->Data[i], void*));
+            cleanup(CAST(dq->Elements[i], void*));
         }
     }
-    XFREE(dq->Data);
+    XFREE(dq->Elements);
 
     return dispose(dq);
 }

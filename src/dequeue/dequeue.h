@@ -24,7 +24,7 @@ struct Dequeue
 {
     u64             Size            ;
     u64             Capacity        ;
-    arch       *    Data            ;
+    arch       *    Elements        ;
     dispose_fn *    Dispose         ;
 };
 
