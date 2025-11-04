@@ -21,7 +21,6 @@ void result_init_(BORROWED Result * result, TResult tag, arch value)
     }
 
     result->Tag         = tag;
-    result->IsUnwrapped = False;
 }
 
 OWNED Result * mk_result(TResult tag, arch value)
@@ -44,11 +43,6 @@ OWNED Result * mk_result_failure(arch failure)
 arch result_unwrap(BORROWED Result * result)
 {
     SCP(result);
-    if (result->IsUnwrapped)
-    {
-        PANIC("%s(): Result is already unwrapped.", __func__);
-    }
-
     switch (result->Tag)
     {
         case RESULT_SUCCESS:
@@ -71,11 +65,6 @@ arch result_unwrap(BORROWED Result * result)
 arch result_unwrap_else(BORROWED Result * result, arch alternative)
 {
     SCP(result);
-    if (result->IsUnwrapped)
-    {
-        PANIC("%s(): Result is already unwrapped.", __func__);
-    }
-
     switch (result->Tag)
     {
         case RESULT_SUCCESS:
@@ -98,11 +87,6 @@ arch result_unwrap_else(BORROWED Result * result, arch alternative)
 arch result_unwrap_owned(OWNED Result * result)
 {
     SCP(result);
-    if (result->IsUnwrapped)
-    {
-        PANIC("%s(): Result is already unwrapped.", __func__);
-    }
-
     arch value;
     switch (result->Tag)
     {
@@ -121,8 +105,6 @@ arch result_unwrap_owned(OWNED Result * result)
             PANIC("%s(): Unknown TResult value %d", __func__, result->Tag);
         } break;
     }
-
-    result->IsUnwrapped = True;
     result_dispose(result);
 
     return value;
@@ -131,11 +113,6 @@ arch result_unwrap_owned(OWNED Result * result)
 arch result_unwrap_else_owned(OWNED Result * result, arch alternative)
 {
     SCP(result);
-    if (result->IsUnwrapped)
-    {
-        PANIC("%s(): Result is already unwrapped.", __func__);
-    }
-
     arch value;
     switch (result->Tag)
     {
@@ -155,7 +132,6 @@ arch result_unwrap_else_owned(OWNED Result * result, arch alternative)
         } break;
     }
 
-    result->IsUnwrapped = True;
     result_dispose(result);
 
     return value;
@@ -167,11 +143,6 @@ COPIED void * result_dispose(OWNED void * arg)
     {
         return NIL;
     }
-
     OWNED Result * res = CAST(arg, Result*);
-    if (!res->IsUnwrapped)
-    {
-        PANIC("%s(): Result is not unwrapped before disposal.", __func__);
-    }
     return dispose(res);
 }

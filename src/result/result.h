@@ -11,7 +11,7 @@ typedef struct Result Result;
 /**
  * @since       03.11.2025
  * @author      Junzhe
- * @modified    03.11.2025
+ * @modified	04.11.2025
  *
  */
 enum TResult
@@ -23,7 +23,7 @@ enum TResult
 /**
  * @since       03.11.2025
  * @author      Junzhe
- * @modified    03.11.2025
+ * @modified    04.11.2025
  *
  */
 struct Result
@@ -34,13 +34,12 @@ struct Result
         arch Success;
         arch Failure;
     };
-    bool IsUnwrapped;
 };
 
 /**
  * @since       03.11.2025
  * @author      Junzhe
- * @modified    03.11.2025
+ * @modified	04.11.2025
  *
  */
 OWNED Result * mk_result(TResult tag, arch value);
@@ -48,7 +47,7 @@ OWNED Result * mk_result(TResult tag, arch value);
 /**
  * @since       03.11.2025
  * @author      Junzhe
- * @modified    03.11.2025
+ * @modified	04.11.2025
  *
  */
 OWNED Result * mk_result_success(arch success);
@@ -56,7 +55,7 @@ OWNED Result * mk_result_success(arch success);
 /**
  * @since       03.11.2025
  * @author      Junzhe
- * @modified    03.11.2025
+ * @modified	04.11.2025
  *
  */
 OWNED Result * mk_result_failure(arch failure);
@@ -64,7 +63,7 @@ OWNED Result * mk_result_failure(arch failure);
 /**
  * @since       03.11.2025
  * @author      Junzhe
- * @modified    03.11.2025
+ * @modified	04.11.2025
  *
  */
 arch result_unwrap(BORROWED Result * result);
@@ -72,7 +71,7 @@ arch result_unwrap(BORROWED Result * result);
 /**
  * @since       03.11.2025
  * @author      Junzhe
- * @modified    03.11.2025
+ * @modified	04.11.2025
  *
  */
 arch result_unwrap_else(BORROWED Result * result, arch alternative);
@@ -80,7 +79,7 @@ arch result_unwrap_else(BORROWED Result * result, arch alternative);
 /**
  * @since       03.11.2025
  * @author      Junzhe
- * @modified    03.11.2025
+ * @modified	04.11.2025
  *
  */
 arch result_unwrap_owned(OWNED Result * result);
@@ -88,7 +87,7 @@ arch result_unwrap_owned(OWNED Result * result);
 /**
  * @since       03.11.2025
  * @author      Junzhe
- * @modified    03.11.2025
+ * @modified	04.11.2025
  *
  */
 arch result_unwrap_else_owned(OWNED Result * result, arch alternative);
@@ -96,7 +95,12 @@ arch result_unwrap_else_owned(OWNED Result * result, arch alternative);
 /**
  * @since       03.11.2025
  * @author      Junzhe
- * @modified    03.11.2025
+ * @modified	04.11.2025
  *
+ * @brief       Safely dispose the @struct {Result}.
+ *
+ * NOTE:
+ * You have handle the disposal of @field {Result.Success} or @field {Result.Failure} on you own.
+ * This disposal function does nothing on them.
  */
 COPIED void * result_dispose(OWNED void * arg);
