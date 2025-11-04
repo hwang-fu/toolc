@@ -33,7 +33,7 @@ OWNED Dequeue * mk_dq2(u64 capacity, dispose_fn * cleanup)
 
 arch dq_at(BORROWED Dequeue * dq, u64 idx)
 {
-    OWNED Result * result = dq_try_at(dq);
+    OWNED Result * result = dq_try_at(dq, idx);
     if (RESULT_GOOD(result))
     {
         return result_unwrap_owned(result, NIL);
