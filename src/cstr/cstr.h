@@ -41,9 +41,25 @@ bool strcmp_safe(BORROWED const char * s1, BORROWED const char * s2);
  * @author      Junzhe
  * @modified    04.11.2025
  *
+ */
+bool strncmp_safe(BORROWED const char * s1, BORROWED const char * s2, u64 length);
+
+/**
+ * @since       04.11.2025
+ * @author      Junzhe
+ * @modified    04.11.2025
+ *
  * @brief Compares two C strings ignoring case. Other from that, similar to @func {strcmp_safe}.
  */
 bool strcmp_safe_ignorecase(BORROWED const char * s1, BORROWED const char * s2);
+
+/**
+ * @since       04.11.2025
+ * @author      Junzhe
+ * @modified    04.11.2025
+ *
+ */
+bool strncmp_safe_ignorecase(BORROWED const char * s1, BORROWED const char * s2, u64 length);
 
 /**
  * @since       04.11.2025
