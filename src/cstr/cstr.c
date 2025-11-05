@@ -369,3 +369,18 @@ OWNED char * mk_cstr_from_char(const char c)
     buffer[0] = c;
     return strdup_safe(buffer);
 }
+
+OWNED char * mk_cstr_from_buffer(BORROWED const u8 * buffer, const u64 size)
+{
+    OWNED char * theString = NEW((size + 1)* sizeof(char));
+    memcpy(theString, buffer, size);
+    theString[size] = '\0';
+    return theString;
+}
+
+OWNED char * mk_cstr_from_owned_buffer(OWNED u8 * buffer, const u64 size)
+{
+    OWNED char * theString = mk_cstr_from_buffer(buffer, size);
+    XFREE(buffer);
+    return theString;
+}
