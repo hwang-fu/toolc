@@ -85,7 +85,7 @@ OWNED char * strdup_safe(BORROWED const char * s);
 /**
  * @since       04.11.2025
  * @author      Junzhe
- * @modified    04.11.2025
+ * @modified    05.11.2025
  *
  * @brief       If both inputs are of length @const {0}, it also returns @const {True}.
  */
@@ -94,7 +94,7 @@ bool cstr_starts_with_ignorecase(BORROWED const char * s, BORROWED const char * 
 /**
  * @since       04.11.2025
  * @author      Junzhe
- * @modified    04.11.2025
+ * @modified    05.11.2025
  *
  * @brief       If both inputs are of length @const {0}, it also returns @const {True}.
  */
@@ -103,7 +103,7 @@ bool cstr_ends_with_ignorecase(BORROWED const char * s, BORROWED const char * su
 /**
  * @since       04.11.2025
  * @author      Junzhe
- * @modified    04.11.2025
+ * @modified    05.11.2025
  *
  * @brief       If both inputs are of length @const {0}, it also returns @const {True}.
  */
@@ -112,7 +112,7 @@ bool cstr_starts_with(BORROWED const char * s, BORROWED const char * prefix);
 /**
  * @since       04.11.2025
  * @author      Junzhe
- * @modified    04.11.2025
+ * @modified    05.11.2025
  *
  * @brief       If both inputs are of length @const {0}, it also returns @const {True}.
  */
@@ -121,7 +121,7 @@ bool cstr_ends_with(BORROWED const char * s, BORROWED const char * suffix);
 /**
  * @since       04.11.2025
  * @author      Junzhe
- * @modified    04.11.2025
+ * @modified    05.11.2025
  *
  * @brief       If both inputs are of length @const {0}, it also returns @const {True}.
  */
@@ -130,7 +130,7 @@ bool cstr_starts_with_owned(BORROWED const char * s, OWNED char * prefix);
 /**
  * @since       04.11.2025
  * @author      Junzhe
- * @modified    04.11.2025
+ * @modified    05.11.2025
  *
  * @brief       If both inputs are of length @const {0}, it also returns @const {True}.
  */
@@ -179,7 +179,7 @@ OWNED char * mk_cstr_with_owned_prefix(BORROWED const char * s, OWNED char * pre
 /**
  * @since       04.11.2025
  * @author      Junzhe
- * @modified    04.11.2025
+ * @modified    05.11.2025
  *
  */
 OWNED char * mk_cstr_toupper(BORROWED const char * s);
@@ -187,7 +187,7 @@ OWNED char * mk_cstr_toupper(BORROWED const char * s);
 /**
  * @since       04.11.2025
  * @author      Junzhe
- * @modified    04.11.2025
+ * @modified    05.11.2025
  *
  */
 OWNED char * mk_cstr_toupper_owned(OWNED char * s);
@@ -195,7 +195,7 @@ OWNED char * mk_cstr_toupper_owned(OWNED char * s);
 /**
  * @since       04.11.2025
  * @author      Junzhe
- * @modified    04.11.2025
+ * @modified    05.11.2025
  *
  */
 OWNED char * mk_cstr_tolower(BORROWED const char * s);
@@ -203,7 +203,7 @@ OWNED char * mk_cstr_tolower(BORROWED const char * s);
 /**
  * @since       04.11.2025
  * @author      Junzhe
- * @modified    04.11.2025
+ * @modified    05.11.2025
  *
  */
 OWNED char * mk_cstr_tolower_owned(OWNED char * s);
@@ -211,7 +211,7 @@ OWNED char * mk_cstr_tolower_owned(OWNED char * s);
 /**
  * @since       04.11.2025
  * @author      Junzhe
- * @modified    04.11.2025
+ * @modified    05.11.2025
  *
  */
 OWNED char * mk_cstr_from_char(const char c);
@@ -219,7 +219,7 @@ OWNED char * mk_cstr_from_char(const char c);
 /**
  * @since       04.11.2025
  * @author      Junzhe
- * @modified    04.11.2025
+ * @modified    05.11.2025
  *
  */
 OWNED char * mk_cstr_from_buffer(BORROWED const u8 * buffer, const u64 size);
@@ -227,7 +227,7 @@ OWNED char * mk_cstr_from_buffer(BORROWED const u8 * buffer, const u64 size);
 /**
  * @since       04.11.2025
  * @author      Junzhe
- * @modified    04.11.2025
+ * @modified    05.11.2025
  *
  */
 OWNED char * mk_cstr_from_owned_buffer(OWNED u8 * buffer, const u64 size);
@@ -235,7 +235,7 @@ OWNED char * mk_cstr_from_owned_buffer(OWNED u8 * buffer, const u64 size);
 /**
  * @since       04.11.2025
  * @author      Junzhe
- * @modified    04.11.2025
+ * @modified    05.11.2025
  *
  */
 bool cis_digit(const char c);
@@ -243,7 +243,7 @@ bool cis_digit(const char c);
 /**
  * @since       04.11.2025
  * @author      Junzhe
- * @modified    04.11.2025
+ * @modified    05.11.2025
  *
  */
 bool cis_bdigit(const char c);
@@ -251,7 +251,7 @@ bool cis_bdigit(const char c);
 /**
  * @since       04.11.2025
  * @author      Junzhe
- * @modified    04.11.2025
+ * @modified    05.11.2025
  *
  */
 bool cis_odigit(const char c);
@@ -259,7 +259,7 @@ bool cis_odigit(const char c);
 /**
  * @since       04.11.2025
  * @author      Junzhe
- * @modified    04.11.2025
+ * @modified    05.11.2025
  *
  */
 bool cis_xdigit(const char c);
@@ -267,7 +267,7 @@ bool cis_xdigit(const char c);
 /**
  * @since       04.11.2025
  * @author      Junzhe
- * @modified    04.11.2025
+ * @modified    05.11.2025
  *
  */
 bool cis_english_upperletter(const char c);
@@ -275,7 +275,7 @@ bool cis_english_upperletter(const char c);
 /**
  * @since       04.11.2025
  * @author      Junzhe
- * @modified    04.11.2025
+ * @modified    05.11.2025
  *
  */
 bool cis_english_lowerletter(const char c);
@@ -283,7 +283,7 @@ bool cis_english_lowerletter(const char c);
 /**
  * @since       04.11.2025
  * @author      Junzhe
- * @modified    04.11.2025
+ * @modified    05.11.2025
  *
  */
 bool cis_english_letter(const char c);
@@ -291,7 +291,7 @@ bool cis_english_letter(const char c);
 /**
  * @since       04.11.2025
  * @author      Junzhe
- * @modified    04.11.2025
+ * @modified    05.11.2025
  *
  * @brief       If the @param {c} is not a valid english letter, it will returned as it was.
  */
@@ -300,7 +300,7 @@ char cto_english_upperletter(const char c);
 /**
  * @since       04.11.2025
  * @author      Junzhe
- * @modified    04.11.2025
+ * @modified    05.11.2025
  *
  * @brief       If the @param {c} is not a valid english letter, it will returned as it was.
  */
@@ -325,7 +325,7 @@ OWNED Result * sto_integer_owned(OWNED char * s);
 /**
  * @since       04.11.2025
  * @author      Junzhe
- * @modified    04.11.2025
+ * @modified    05.11.2025
  *
  * @brief       If if @param {s} is a valid integer string (either decimal or other types),
  *              returns @const {True}. Otherwise, returns @const {False}.
@@ -335,7 +335,7 @@ bool sis_integer(BORROWED const char * s);
 /**
  * @since       04.11.2025
  * @author      Junzhe
- * @modified    04.11.2025
+ * @modified    05.11.2025
  *
  * @brief       This function does not care whether a "0b" or "0B" prefix is present or not.
  */
@@ -344,7 +344,7 @@ bool sis_binary_integer(BORROWED const char * s);
 /**
  * @since       04.11.2025
  * @author      Junzhe
- * @modified    04.11.2025
+ * @modified    05.11.2025
  *
  * @brief       This function does not care whether a "0o" or "0O" prefix is present or not.
  */
@@ -353,7 +353,7 @@ bool sis_octal_integer(BORROWED const char * s);
 /**
  * @since       04.11.2025
  * @author      Junzhe
- * @modified    04.11.2025
+ * @modified    05.11.2025
  *
  */
 bool sis_decimal_integer(BORROWED const char * s);
@@ -361,7 +361,7 @@ bool sis_decimal_integer(BORROWED const char * s);
 /**
  * @since       04.11.2025
  * @author      Junzhe
- * @modified    04.11.2025
+ * @modified    05.11.2025
  *
  * @brief       This function does not care whether a "0x" or "0X" prefix is present or not.
  */
