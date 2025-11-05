@@ -450,6 +450,7 @@ OWNED Result * mk_u64_from_owned_cstring(OWNED char * s)
 
 bool sis_integer(BORROWED const char * s)
 {
+    return sis_binary_integer(s) || sis_octal_integer(s) || sis_decimal_integer(s) || sis_hexadecimal_integer(s);
 }
 
 bool sis_binary_integer(BORROWED const char * s)
