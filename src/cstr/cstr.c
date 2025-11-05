@@ -424,10 +424,20 @@ bool cis_english_letter(const char c)
 
 char cto_english_upperletter(const char c)
 {
+    if (cis_english_lowerletter(c))
+    {
+        return c - 'a' + 'A';
+    }
+    return c;
 }
 
 char cto_english_lowerletter(const char c)
 {
+    if (cis_english_upperletter(c))
+    {
+        return c - 'A' + 'a';
+    }
+    return c;
 }
 
 OWNED Result * mk_u64_from_cstring(OWNED char * s)
