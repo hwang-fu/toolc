@@ -460,7 +460,7 @@ bool sis_binary_integer(BORROWED const char * s)
         return False;
     }
 
-    if (cstr_starts_with(s, "0b") || cstr_starts_with("0B"))
+    if (cstr_starts_with(s, "0b") || cstr_starts_with(s, "0B"))
     {
         INC(s);
         INC(s);
@@ -486,7 +486,7 @@ bool sis_octal_integer(BORROWED const char * s)
         return False;
     }
 
-    if (cstr_starts_with(s, "0o") || cstr_starts_with("0O"))
+    if (cstr_starts_with(s, "0o") || cstr_starts_with(s, "0O"))
     {
         INC(s);
         INC(s);
@@ -532,7 +532,7 @@ bool sis_hexadecimal_integer(BORROWED const char * s)
         return False;
     }
 
-    if (cstr_starts_with(s, "0x") || cstr_starts_with("0X"))
+    if (cstr_starts_with(s, "0x") || cstr_starts_with(s, "0X"))
     {
         INC(s);
         INC(s);
