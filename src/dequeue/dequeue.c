@@ -2,7 +2,11 @@
 
 OWNED Dequeue * dq_init(OWNED Dequeue * dq, u64 capacity, dispose_fn * cleanup)
 {
-    SCP(dq);
+    if (!dq)
+    {
+        dq = NEW(sizeof(Dequeue));
+    }
+
     if (EQ(capacity, 0))
     {
         WARNINGF("%s(): Dequeue initialized capacity is zero, default to %lu.", __func__, DEQUEUE_DEFAULT_CAPACITY);
@@ -11,15 +15,55 @@ OWNED Dequeue * dq_init(OWNED Dequeue * dq, u64 capacity, dispose_fn * cleanup)
 
     dq->Capacity      = capacity;
     dq->Size          = 0;
-    dq->Elements          = NEW(capacity * sizeof(arch));
+    dq->Elements      = NEW(capacity * sizeof(arch));
     dq->Dispose       = cleanup;
 
     return dq;
 }
 
-OWNED Dequeue * mk_dq()
+OWNED Dequeue * mk_dq(int mode, ...)
 {
-    return NEW(sizeof(Dequeue));
+    va_list ap;
+    va_start(ap, mode);
+
+    u64          capacity = DEQUEUE_DEFAULT_CAPACITY;
+    dispose_fn * cleanup  = NIL;
+    switch (mode)
+    {
+        case 0:
+        {
+        } break;
+
+        case 1:
+        {
+            capacity = va_arg(ap, u64);
+        } break;
+
+        case 2:
+        {
+            cleanup = va_arg(ap, dispose_fn*);
+        } break;
+
+        case 3:
+        {
+            capacity = va_arg(ap, u64);
+            cleanup  = va_arg(ap, dispose_fn*);
+        } break;
+
+        case 4:
+        {
+            cleanup  = va_arg(ap, dispose_fn*);
+            capacity = va_arg(ap, u64);
+        } break;
+
+        default:
+        {
+            PANIC("%s(): unkown mode %d", mode);
+        } break;
+    }
+
+    va_end(ap);
+    return dq_init(NIL, capacity, cleanup);
 }
 
 OWNED Dequeue * mk_dq2(u64 capacity, dispose_fn * cleanup)
@@ -324,7 +368,7 @@ OWNED Result * dq_try_front(BORROWED Dequeue * dq)
         return RESULT_FAIL(1);
     }
 
-    return RESULT_SUCCEED(CAST(dq->Elements[0], arch));
+    return RESULT_SUCCEED(dq->Elements[0]);
 }
 
 OWNED Result * dq_try_back(BORROWED Dequeue * dq)
@@ -340,7 +384,7 @@ OWNED Result * dq_try_back(BORROWED Dequeue * dq)
         return RESULT_FAIL(1);
     }
 
-    return RESULT_SUCCEED(CAST(dq->Elements[size-1], arch));
+    return RESULT_SUCCEED(dq->Elements[size-1]);
 }
 
 OWNED Result * dq_try_popfront(BORROWED Dequeue * dq)
