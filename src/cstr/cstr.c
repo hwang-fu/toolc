@@ -130,19 +130,10 @@ bool cstr_starts_with_owned(BORROWED const char * s, OWNED char * prefix)
 
 bool cstr_starts_with_ignorecase(BORROWED const char * s, BORROWED const char * prefix)
 {
-    if (EQ(s, prefix))
-    {
-        return True;
-    }
-
-    if (!s || !prefix)
-    {
-        return False;
-    }
-
     u64 len1 = strlen_safe(s);
     u64 len2 = strlen_safe(prefix);
 
+    // if len(s) < len(prefix), then definitely @const {False}.
     if (len1 < len2)
     {
         return False;
@@ -159,19 +150,10 @@ bool cstr_starts_with_ignorecase(BORROWED const char * s, BORROWED const char * 
 
 bool cstr_starts_with(BORROWED const char * s, BORROWED const char * prefix)
 {
-    if (EQ(s, prefix))
-    {
-        return True;
-    }
-
-    if (!s || !prefix)
-    {
-        return False;
-    }
-
     u64 len1 = strlen_safe(s);
     u64 len2 = strlen_safe(prefix);
 
+    // if len(s) < len(prefix), then definitely @const {False}.
     if (len1 < len2)
     {
         return False;
@@ -183,7 +165,7 @@ bool cstr_starts_with(BORROWED const char * s, BORROWED const char * prefix)
         return True;
     }
 
-    return EQ(0, memcmp(s, prefix, len2));
+    return strncmp_safe(s, prefix, len2);
 }
 
 bool cstr_ends_with_owned(BORROWED const char * s, OWNED char * suffix)
@@ -195,19 +177,10 @@ bool cstr_ends_with_owned(BORROWED const char * s, OWNED char * suffix)
 
 bool cstr_ends_with_ignorecase(BORROWED const char * s, BORROWED const char * suffix)
 {
-    if (EQ(s, suffix))
-    {
-        return True;
-    }
-
-    if (!s || !suffix)
-    {
-        return False;
-    }
-
     u64 len1 = strlen_safe(s);
     u64 len2 = strlen_safe(suffix);
 
+    // if len(s) < len(suffix), then definitely @const {False}.
     if (len1 < len2)
     {
         return False;
@@ -219,24 +192,16 @@ bool cstr_ends_with_ignorecase(BORROWED const char * s, BORROWED const char * su
         return True;
     }
 
-    TODO;
+    u64 offset = len1 - len2;
+    return strcmp_safe_ignorecase(s + offset, suffix);
 }
 
 bool cstr_ends_with(BORROWED const char * s, BORROWED const char * suffix)
 {
-    if (EQ(s, suffix))
-    {
-        return True;
-    }
-
-    if (!s || !suffix)
-    {
-        return False;
-    }
-
     u64 len1 = strlen_safe(s);
     u64 len2 = strlen_safe(suffix);
 
+    // if len(s) < len(suffix), then definitely @const {False}.
     if (len1 < len2)
     {
         return False;
@@ -248,7 +213,8 @@ bool cstr_ends_with(BORROWED const char * s, BORROWED const char * suffix)
         return True;
     }
 
-    return EQ(0, memcmp(s, suffix, len2));
+    u64 offset = len1 - len2;
+    return strcmp_safe(s + offset, suffix);
 }
 
 char cstr_at(BORROWED const char * s, u64 idx)
@@ -256,9 +222,7 @@ char cstr_at(BORROWED const char * s, u64 idx)
     if (strlen_safe(s) <= idx)
     {
         PANIC("%s(): index %lu out of range for \"%s\".",
-                __func__,
-                idx,
-                s);
+                __func__, idx, s);
     }
     return s[idx];
 }

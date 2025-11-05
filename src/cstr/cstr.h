@@ -24,7 +24,7 @@ u64 strlen_safe(BORROWED const char * s);
  * @brief       Safely compares two C strings.
  *
  * Performs a {NIL}-safe comparison between @param s1 and @param {s2}.
- * - Returns @const {True} if both strings have the length @const {0} via @func {strlen_safe}.
+ * - Returns @const {True} if both strings have the length @const {0}.
  * - Otherwise, compares the string contents using strcmp().
  *
  * Optionally supports case-insensitive comparison if `CSTR_IGNORE_CASE` macro is defined at compile time.
