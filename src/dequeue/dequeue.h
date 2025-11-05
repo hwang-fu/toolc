@@ -2,6 +2,7 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <stdarg.h>
 
 #include "hwangfu/generic.h"
 #include "hwangfu/result.h"
@@ -38,9 +39,17 @@ OWNED Dequeue * dq_init(OWNED Dequeue * dq, u64 capacity, dispose_fn * cleanup);
 /**
  * @since       03.11.2025
  * @author      Junzhe
- * @modified    03.11.2025
+ * @modified    06.11.2025
+ *
+ * @brief       Customize a @struct {Dequeue}.
+ *
+ * Possible overloads:
+ * @li OWNED Dequeue * mk_dq(1, u64 capacity)
+ * @li OWNED Dequeue * mk_dq(2, dispose_fn * cleanup)
+ * @li OWNED Dequeue * mk_dq(3, u64 capacity, dispose_fn * cleanup)
+ * @li OWNED Dequeue * mk_dq(4, dispose_fn * cleanup, u64 capacity)
  */
-OWNED Dequeue * mk_dq();
+OWNED Dequeue * mk_dq(int mode, ...);
 
 /**
  * @since       03.11.2025
