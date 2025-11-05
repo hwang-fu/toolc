@@ -6,7 +6,6 @@ u64 strlen_safe(BORROWED const char * s)
     {
         return 0;
     }
-
     return (u64) strlen(s);
 }
 
