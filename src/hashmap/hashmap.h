@@ -157,6 +157,22 @@ OWNED Result * hm_try_del_owned_key(BORROWED Hashmap * hm, OWNED char * key);
  * @modified    06.11.2025
  *
  */
+
+bool hm_has(BORROWED Hashmap * hm, BORROWED const char * key);
+/**
+ * @since       06.11.2025
+ * @author      Junzhe
+ * @modified    06.11.2025
+ *
+ */
+bool hm_has_owned_key(BORROWED Hashmap * hm, OWNED char * key);
+
+/**
+ * @since       06.11.2025
+ * @author      Junzhe
+ * @modified    06.11.2025
+ *
+ */
 u64 hm_get_size(BORROWED Hashmap * hm);
 
 /**

@@ -190,6 +190,34 @@ OWNED Result * hm_try_del_owned_key(BORROWED Hashmap * hm, OWNED char * key)
     return result;
 }
 
+bool hm_has(BORROWED Hashmap * hm, BORROWED const char * key)
+{
+    bool b = False;
+
+    OWNED Result * result = hm_try_get(hm, key);
+    if (RESULT_GOOD(result))
+    {
+        b = True;
+    }
+    dispose(result);
+
+    return b;
+}
+
+bool hm_has_owned_key(BORROWED Hashmap * hm, OWNED char * key)
+{
+    bool b = False;
+
+    OWNED Result * result = hm_try_get_owned_key(hm, key);
+    if (RESULT_GOOD(result))
+    {
+        b = True;
+    }
+    dispose(result);
+
+    return b;
+}
+
 u64 hm_get_size(BORROWED Hashmap * hm)
 {
     OWNED Result * result = hm_try_get_size(hm);
@@ -199,7 +227,7 @@ u64 hm_get_size(BORROWED Hashmap * hm)
     }
 
     u64 errcode = (u64) result->Failure;
-    result_dispose(result);
+    dispose(result);
     switch (errcode)
     {
         case 0:
