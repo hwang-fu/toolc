@@ -152,6 +152,7 @@ COPIED void * hm_dispose(OWNED void * arg)
     {
         hme_dispose(hm->Buckets[i], cleanup);
     }
+    XFREE(hm->Buckets);
 
     return dispose(hm);
 }
