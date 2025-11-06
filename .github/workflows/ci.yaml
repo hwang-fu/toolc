@@ -30,12 +30,11 @@ jobs:
       - name: Setup
         run: |
           sudo apt-get update && sudo apt-get install -y build-essential clang
-          echo 'export C_INCLUDE_PATH="$GITHUB_WORKSPACE/include:${C_INCLUDE_PATH:-}"' >> ~/.bashrc
-          echo 'export LIBRARY_PATH="$GITHUB_WORKSPACE/lib:${LIBRARY_PATH:-}"'         >> ~/.bashrc
-          source ~/.bashrc
+          echo "C_INCLUDE_PATH=${GITHUB_WORKSPACE}/include:${C_INCLUDE_PATH:-}" >> "$GITHUB_ENV"
+          echo "LIBRARY_PATH=${GITHUB_WORKSPACE}/lib:${LIBRARY_PATH:-}"         >> "$GITHUB_ENV"
 
       - name: Build
-        run: make
+        run: make -j
 
       - name: Test
         run: make test
