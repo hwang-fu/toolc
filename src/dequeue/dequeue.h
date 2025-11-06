@@ -13,6 +13,12 @@
 #define DEQUEUE_DEFAULT_CAPACITY (20)
 #endif // DEQUEUE_DEFAULT_CAPACITY
 
+#define dq_pushfront(dq, data) _dq_pushfront(dq, CAST(data, arch))
+#define dq_pushback(dq, data)  _dq_pushback(dq, CAST(data, arch))
+
+#define dq_try_pushfront(dq, data) _dq_try_pushfront(dq, CAST(data, arch))
+#define dq_try_pushback(dq, data)  _dq_try_pushback(dq, CAST(data, arch))
+
 typedef struct Dequeue Dequeue;
 typedef arch (dq_apply_fn) (arch);
 
@@ -70,14 +76,14 @@ arch dq_at(BORROWED Dequeue * dq, u64 idx);
  * @author      Junzhe
  * @modified    04.11.2025
  */
-void dq_pushfront(BORROWED Dequeue * dq, arch data);
+void _dq_pushfront(BORROWED Dequeue * dq, arch data);
 
 /**
  * @since       03.11.2025
  * @author      Junzhe
  * @modified    04.11.2025
  */
-void dq_pushback(BORROWED Dequeue * dq, arch data);
+void _dq_pushback(BORROWED Dequeue * dq, arch data);
 
 /**
  * @since       03.11.2025
@@ -119,14 +125,14 @@ OWNED Result * dq_try_at(BORROWED Dequeue * dq, u64 idx);
  * @author      Junzhe
  * @modified	04.11.2025
  */
-OWNED Result * dq_try_pushfront(BORROWED Dequeue * dq, arch data);
+OWNED Result * _dq_try_pushfront(BORROWED Dequeue * dq, arch data);
 
 /**
  * @since       03.11.2025
  * @author      Junzhe
  * @modified	04.11.2025
  */
-OWNED Result * dq_try_pushback(BORROWED Dequeue * dq, arch data);
+OWNED Result * _dq_try_pushback(BORROWED Dequeue * dq, arch data);
 
 /**
  * @since       03.11.2025
