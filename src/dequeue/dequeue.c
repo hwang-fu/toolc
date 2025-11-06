@@ -104,13 +104,13 @@ arch dq_at(BORROWED Dequeue * dq, u64 idx)
     }
 }
 
-void dq_pushfront(BORROWED Dequeue * dq, arch data)
+void _dq_pushfront(BORROWED Dequeue * dq, arch data)
 {
-    OWNED Result * result = dq_try_pushfront(dq, data);
+    OWNED Result * result = _dq_try_pushfront(dq, data);
     if (RESULT_GOOD(result))
     {
         result_dispose(result);
-        goto dq_pushfront_exit_;
+        goto _dq_pushfront_exit_;
     }
 
     u64 errcode = (u64) result->Failure;
@@ -133,16 +133,16 @@ void dq_pushfront(BORROWED Dequeue * dq, arch data)
         } break;
     }
 
-dq_pushfront_exit_:
+_dq_pushfront_exit_:
 }
 
-void dq_pushback(BORROWED Dequeue * dq, arch data)
+void _dq_pushback(BORROWED Dequeue * dq, arch data)
 {
-    OWNED Result * result = dq_try_pushback(dq, data);
+    OWNED Result * result = _dq_try_pushback(dq, data);
     if (RESULT_GOOD(result))
     {
         result_dispose(result);
-        goto dq_pushback_exit_;
+        goto _dq_pushback_exit_;
     }
 
     u64 errcode = (u64) result->Failure;
@@ -165,7 +165,7 @@ void dq_pushback(BORROWED Dequeue * dq, arch data)
         } break;
     }
 
-dq_pushback_exit_:
+_dq_pushback_exit_:
 }
 
 arch dq_front(BORROWED Dequeue * dq)
@@ -299,7 +299,7 @@ OWNED Result * dq_try_at(BORROWED Dequeue * dq, u64 idx)
     return RESULT_SUCCEED(dq->Elements[idx]);
 }
 
-OWNED Result * dq_try_pushfront(BORROWED Dequeue * dq, arch data)
+OWNED Result * _dq_try_pushfront(BORROWED Dequeue * dq, arch data)
 {
     if (!dq)
     {
@@ -328,7 +328,7 @@ OWNED Result * dq_try_pushfront(BORROWED Dequeue * dq, arch data)
     return RESULT_SUCCEED(0);
 }
 
-OWNED Result * dq_try_pushback(BORROWED Dequeue * dq, arch data)
+OWNED Result * _dq_try_pushback(BORROWED Dequeue * dq, arch data)
 {
     if (!dq)
     {
