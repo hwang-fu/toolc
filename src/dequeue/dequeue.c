@@ -500,7 +500,7 @@ OWNED Result * dq_try_fit(BORROWED Dequeue * dq, u64 newCapacity)
         return RESULT_FAIL(1);
     }
 
-    dq->Elements = realloc_safe(dq, newCapacity);
+    dq->Elements = realloc_safe(dq->Elements, newCapacity * sizeof(arch));
     dq->Capacity = newCapacity;
 
     return RESULT_SUCCEED(0);
