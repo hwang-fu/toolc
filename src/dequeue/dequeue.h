@@ -13,11 +13,11 @@
 #define DEQUEUE_DEFAULT_CAPACITY (20)
 #endif // DEQUEUE_DEFAULT_CAPACITY
 
-#define dq_pushfront(dq, data) _dq_pushfront(dq, CAST(data, arch))
-#define dq_pushback(dq, data)  _dq_pushback(dq, CAST(data, arch))
+#define dq_pushfront(dq, data) _dq_pushfront(dq, CAST((data), arch))
+#define dq_pushback(dq, data)  _dq_pushback(dq, CAST((data), arch))
 
-#define dq_try_pushfront(dq, data) _dq_try_pushfront(dq, CAST(data, arch))
-#define dq_try_pushback(dq, data)  _dq_try_pushback(dq, CAST(data, arch))
+#define dq_try_pushfront(dq, data) _dq_try_pushfront(dq, CAST((data), arch))
+#define dq_try_pushback(dq, data)  _dq_try_pushback(dq, CAST((data), arch))
 
 typedef struct Dequeue Dequeue;
 typedef arch (dq_apply_fn) (arch);
