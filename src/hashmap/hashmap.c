@@ -63,6 +63,47 @@ OWNED Hashmap * hm_init(OWNED Hashmap * hm, u64 capacity, dispose_fn * cleanup)
  */
 OWNED Hashmap * mk_hm(int mode, ...)
 {
+    va_list ap;
+    va_start(ap, mode);
+
+    u64          capacity = DEQUEUE_DEFAULT_CAPACITY;
+    dispose_fn * cleanup  = NIL;
+    switch (mode)
+    {
+        case 0:
+        {
+        } break;
+
+        case 1:
+        {
+            capacity = va_arg(ap, u64);
+        } break;
+
+        case 2:
+        {
+            cleanup = va_arg(ap, dispose_fn*);
+        } break;
+
+        case 3:
+        {
+            capacity = va_arg(ap, u64);
+            cleanup  = va_arg(ap, dispose_fn*);
+        } break;
+
+        case 4:
+        {
+            cleanup  = va_arg(ap, dispose_fn*);
+            capacity = va_arg(ap, u64);
+        } break;
+
+        default:
+        {
+            PANIC("%s(): unkown mode %d", mode);
+        } break;
+    }
+
+    va_end(ap);
+    return hm_init(NIL, capacity, cleanup);
 }
 
 void _hm_ins(BORROWED Hashmap * hm, BORROWED const char * key, arch val)
