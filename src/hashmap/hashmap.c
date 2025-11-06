@@ -14,9 +14,13 @@ struct HashmapEntry
 };
 
 static u64 fnv1a_hash_(BORROWED const char * key);
+
 static void hm_fit_(BORROWED Hashmap * hm, const u64 newCapacity);
-static void hm_ins_helper_(BORROWED HashmapEntry ** buckets, u64 idx, OWNED HashmapEntry * entry);
 static OWNED Result * hm_try_fit_(BORROWED Hashmap * hm, const u64 newCapacity);
+
+static void hm_ins_helper_(BORROWED HashmapEntry ** buckets, u64 idx, OWNED HashmapEntry * entry);
+
+static void mk_hme_(BORROWED char * key, arch val);
 static COPIED void * hme_dispose_(OWNED void * arg, dispose_fn * cleanup);
 static COPIED void * hme_dispose_recursive_(OWNED void * arg, dispose_fn * cleanup);
 
@@ -122,27 +126,54 @@ static void hm_ins_helper_(BORROWED HashmapEntry ** buckets, u64 idx, OWNED Hash
         PANIC("%s(): ", __func__);
     }
 
-    if (!buckets[idx])
-    {
-        buckets[idx] = entry;
-    }
-    else
-    {
-        BORROWED HashmapEntry * tail = buckets[idx];
-        while (tail->Next)
-        {
-            tail = tail->Next;
-        }
-        tail->Next = entry;
-    }
+    entry->Next = buckets[idx];
+    buckets[idx] = entry;
 }
 
 void _hm_ins(BORROWED Hashmap * hm, BORROWED const char * key, arch val)
 {
+    OWNED Result * result = _hm_try_ins(hm, key, val);
+    if (RESULT_GOOD(result))
+    {
+        dispose(result);
+        return;
+    }
+
+    u64 errcode = result->Failure;
+    dispose(result);
+    switch (errcode)
+    {
+        case 0:
+        {
+            PANIC("%s(): hm argument is " CRAYON_TO_BOLD("NIL") ".", __func__);
+        } break;
+
+        case 1:
+        {
+            PANIC("%s(): key is " CRAYON_TO_BOLD("NIL") ".", __func__);
+        } break;
+
+        case 2:
+        {
+            PANIC("%s(): key is " CRAYON_TO_BOLD("\"\"") ".", __func__);
+        } break;
+
+        case 3:
+        {
+            PANIC("%s(): failed to fit the capacity.", __func__);
+        } break;
+
+        default:
+        {
+            PANIC("%s(): Unknown error code %lu.", __func__, errcode);
+        } break;
+    }
 }
 
 void _hm_ins_owned_key(BORROWED Hashmap * hm, OWNED char * key, arch val)
 {
+    _hm_ins(hm, key, val);
+    XFREE(key);
 }
 
 arch hm_get(BORROWED Hashmap * hm, BORROWED const char * key)
@@ -240,6 +271,8 @@ void hm_del(BORROWED Hashmap * hm, BORROWED const char * key)
 
 void hm_del_owned_key(BORROWED Hashmap * hm, OWNED char * key)
 {
+    hm_del(hm, key);
+    XFREE(key);
 }
 
 OWNED Result * hm_try_get(BORROWED Hashmap * hm, BORROWED const char * key)
@@ -304,6 +337,30 @@ OWNED Result * _hm_try_ins(BORROWED Hashmap * hm, BORROWED const char * key, arc
     {
         return RESULT_FAIL(2);
     }
+
+    u64 size     = hm->Size;
+    u64 capacity = hm->Capacity;
+    if (WATERMARK(size, capacity) >= WATERMARK_HIGH)
+    {
+        do
+        {
+            capacity += 1;
+            capacity *= 2;
+        } while (WATERMARK(size, capacity) >= WATERMARK_LOW);
+
+        if (!hm_try_fit_(hm, capacity))
+        {
+            return RESULT_FAIL(3);
+        }
+    }
+
+    u64 h   = fnv1a_hash_(key);
+    u64 idx = h % capacity;
+    hm_ins_helper_(hm->Buckets, idx, mk_hme_(key, val));
+
+    hm->Size += 1;
+
+    return RESULT_SUCCEED(0);
 }
 
 OWNED Result * _hm_try_ins_owned_key(BORROWED Hashmap * hm, OWNED char * key, arch val)
@@ -478,6 +535,15 @@ static OWNED Result * hm_try_fit_(BORROWED Hashmap * hm, const u64 newCapacity)
     hm->Capacity = newCapacity;
 
     return RESULT_SUCCEED(0);
+}
+
+static void mk_hme_(BORROWED char * key, arch val)
+{
+    OWNED HashmapEntry * hme = NEW(sizeof(HashmapEntry));
+    hme->Key                 = strdup_safe(key);
+    hme->Val                 = val;
+    hme->Next                = NIL;
+    return hme;
 }
 
 static COPIED void * hme_dispose_(OWNED void * arg, dispose_fn * cleanup)
