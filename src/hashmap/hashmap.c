@@ -395,6 +395,29 @@ OWNED Result * hm_try_del(BORROWED Hashmap * hm, BORROWED const char * key)
     u64 h        = fnv1a_hash_(key);
     u64 capacity = hm->Capacity;
     u64 idx      = h % capacity;
+
+    BORROWED HashmapEntry * bucket = hm->Buckets[idx];
+    BORROWED HashmapEntry * prev   = NIL;
+    while (bucket)
+    {
+        if (strcmp_safe(key, bucket->Key))
+        {
+            if (EQ(prev, NIL))
+            {
+                hm->Buckets[idx] = bucket->Next;
+            }
+            else
+            {
+                prev->Next = bucket->Next;
+            }
+            hme_dispose_(bucket, hm->Dispose);
+            return RESULT_SUCCEED(0);
+        }
+        prev   = bucket;
+        bucket = bucket->Next;
+    }
+
+    return RESULT_FAIL(4);
 }
 
 OWNED Result * hm_try_del_owned_key(BORROWED Hashmap * hm, OWNED char * key)
