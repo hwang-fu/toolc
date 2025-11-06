@@ -1,5 +1,6 @@
-
-HWANGFU := ./hwangfu/
+ROOT 	:= .
+INCLUDE := ./include/hwangfu
+LIB 	:= ./lib
 
 .PHONY: update build clean test
 
@@ -13,7 +14,8 @@ build:
 	@find . -type f \( -name "*.c" -o -name "*.h" \) -exec wc -l {} +
 
 clean:
-	rm -rf ${HWANGFU}/*
+	rm -rf ${INCLUDE}/*
+	rm -rf ${LIB}/*
 
 test:
 	./script/test.sh

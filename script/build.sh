@@ -5,8 +5,8 @@ set -euo pipefail
 shopt -s nullglob
 
 # Destination directories (relative to where you run this)
-DEST_INCLUDE="./hwangfu"
-DEST_LIB="./hwangfu"
+DEST_INCLUDE="./include/hwangfu"
+DEST_LIB="./lib"
 mkdir -p "$DEST_INCLUDE" "$DEST_LIB"
 
 # Colors

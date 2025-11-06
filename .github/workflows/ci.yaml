@@ -14,7 +14,7 @@ jobs:
       - id: read
         run: |
           message="$(git log -1 --pretty=%B)"
-          if echo "$message" | grep -qi '\[skip ci\]' | grep -qi '\[no ci\]'; then
+          if echo "$message" | grep -qiE '\[(skip|no) ci\]'; then
             echo "skip=true" >> "$GITHUB_OUTPUT"
           else
             echo "skip=false" >> "$GITHUB_OUTPUT"
@@ -27,8 +27,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install Dependencies
-        run: sudo apt-get update && sudo apt-get install -y build-essential clang
+      - name: Setup
+        run: |
+          sudo apt-get update && sudo apt-get install -y build-essential clang
+          echo 'export C_INCLUDE_PATH="$GITHUB_WORKSPACE/include:${C_INCLUDE_PATH:-}"' >> ~/.bashrc
+          echo 'export LIBRARY_PATH="$GITHUB_WORKSPACE/lib:${LIBRARY_PATH:-}"'         >> ~/.bashrc
+          source ~/.bashrc
 
       - name: Build
         run: make -j
