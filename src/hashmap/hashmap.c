@@ -156,10 +156,36 @@ OWNED Result * hm_try_del_owned_key(BORROWED Hashmap * hm, OWNED char * key)
 
 u64 hm_get_size(BORROWED Hashmap * hm)
 {
+    OWNED Result * result = hm_try_get_size(hm);
+    if (RESULT_GOOD(result))
+    {
+        return result_unwrap_owned(result, NIL);
+    }
+
+    u64 errcode = (u64) result->Failure;
+    result_dispose(result);
+    switch (errcode)
+    {
+        case 0:
+        {
+            PANIC("%s(): NIL hm argument.", __func__);
+        } break;
+
+        default:
+        {
+            PANIC("%s(): Unknown error.", __func__);
+        } break;
+    }
 }
 
 OWNED Result * hm_try_get_size(BORROWED Hashmap * hm)
 {
+    if (!hm)
+    {
+        return RESULT_FAIL(0);
+    }
+
+    return RESULT_SUCCEED(hm->Size);
 }
 
 static COPIED void * hme_dispose(OWNED void * arg, dispose_fn * cleanup)
