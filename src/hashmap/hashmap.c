@@ -14,6 +14,8 @@ struct HashmapEntry
 };
 
 static u64 fnv1a_hash_(BORROWED const char * key);
+static COPIED void * hme_dispose(OWNED void * arg, dispose_fn * cleanup);
+
 static u64 fnv1a_hash_(BORROWED const char * key)
 {
     u64 hash = 14695981039346656037UL;              // FNV offset basis
@@ -110,4 +112,46 @@ u64 hm_get_size(BORROWED Hashmap * hm)
 
 OWNED Result * hm_try_get_size(BORROWED Hashmap * hm)
 {
+}
+
+static COPIED void * hme_dispose(OWNED void * arg, dispose_fn * cleanup)
+{
+    if (!arg)
+    {
+        return NIL;
+    }
+
+    OWNED HashmapEntry * hme = CAST(arg, HashmapEntry*);
+
+    while (hme->Next)
+    {
+        hme_dispose(hme->Next, cleanup);
+    }
+
+    XFREE(hme->Key);
+    if (cleanup)
+    {
+        cleanup(hme->Val);
+    }
+
+    return dispose(hme);
+}
+
+COPIED void * hm_dispose(OWNED void * arg)
+{
+    if (!arg)
+    {
+        return NIL;
+    }
+
+    OWNED Hashmap * hm = CAST(arg, Hashmap*);
+
+    u64          capacity = hm->Capacity;
+    dispose_fn * cleanup  = hm->Dispose;
+    for (uint64_t i = 0; i < capacity; i++)
+    {
+        hme_dispose(hm->Buckets[i], cleanup);
+    }
+
+    return dispose(hm);
 }
