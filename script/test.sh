@@ -7,8 +7,8 @@ TEST_SRC="$SCRIPT_DIR/../test/test.c"
 OUT_BIN="$SCRIPT_DIR/../test/a.out"
 
 # Optional: custom include/lib dirs via env (LIBDIR/INCDIR), otherwise skipped
-LIBDIR="${LIBDIR:-}"
-INCDIR="${INCDIR:-}"
+INCDIR="$SCRIPT_DIR/.."
+LIBDIR="$SCRIPT_DIR/../hwangfu"
 
 clang "$TEST_SRC" \
     ${INCDIR:+-I"$INCDIR"} \
