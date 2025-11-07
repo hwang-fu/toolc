@@ -181,6 +181,22 @@ u64 hm_get_size(BORROWED Hashmap * hm);
 /**
  * @since       06.11.2025
  * @author      Junzhe
+ * @modified    07.11.2025
+ *
+ */
+void hm_fit(BORROWED Hashmap * hm, const u64 newCapacity);
+
+/**
+ * @since       06.11.2025
+ * @author      Junzhe
+ * @modified    07.11.2025
+ *
+ */
+OWNED Result * hm_try_fit(BORROWED Hashmap * hm, const u64 newCapacity);
+
+/**
+ * @since       06.11.2025
+ * @author      Junzhe
  * @modified    06.11.2025
  *
  */
