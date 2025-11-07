@@ -36,4 +36,21 @@ arch pair_snd(BORROWED Pair * pair)
 
 COPIED void * pair_dispose(OWNED void * arg)
 {
+    if (!arg)
+    {
+        return NIL;
+    }
+
+    OWNED Pair * pair = CAST(arg, Pair*);
+
+    if (pair->DisposeFirst)
+    {
+        pair->DisposeFirst(CAST(pair->First, void*));
+    }
+    if (pair->DisposeSecond)
+    {
+        pair->DisposeSecond(CAST(pair->Second, void*));
+    }
+
+    return dispose(arg);
 }
