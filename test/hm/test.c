@@ -28,6 +28,24 @@
         ASSERT_EQ((i64)hm_get(hm, "four"), -4);
         ASSERT_EQ((i64)hm_get(hm, "five"), -5);
 
+        ASSERT_EXPR(hm_has(hm, "one"));
+        ASSERT_EXPR(hm_has(hm, "two"));
+        ASSERT_EXPR(hm_has(hm, "three"));
+        ASSERT_EXPR(hm_has(hm, "four"));
+        ASSERT_EXPR(hm_has(hm, "five"));
+
+        hm_del(hm, "one");
+        hm_del(hm, "two");
+        hm_del(hm, "three");
+        hm_del(hm, "four");
+        hm_del(hm, "five");
+
+        ASSERT_EXPR(!hm_has(hm, "one"));
+        ASSERT_EXPR(!hm_has(hm, "two"));
+        ASSERT_EXPR(!hm_has(hm, "three"));
+        ASSERT_EXPR(!hm_has(hm, "four"));
+        ASSERT_EXPR(!hm_has(hm, "five"));
+
         hm_dispose(hm);
         pass(cases++);
     }
