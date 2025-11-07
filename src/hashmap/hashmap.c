@@ -183,7 +183,7 @@ arch hm_get(BORROWED Hashmap * hm, BORROWED const char * key)
     OWNED Result * result = hm_try_get(hm, key);
     if (RESULT_GOOD(result))
     {
-        return result_unwrap(result, NIL);
+        return result_unwrap_owned(result, NIL);
     }
 
     u64 errcode = result->Failure;
@@ -228,7 +228,7 @@ arch hm_get_owned_key(BORROWED Hashmap * hm, OWNED char * key)
     if (RESULT_GOOD(result))
     {
         XFREE(key);
-        return result_unwrap(result, NIL);
+        return result_unwrap_owned(result, NIL);
     }
 
     u64 errcode = result->Failure;
