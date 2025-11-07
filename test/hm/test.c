@@ -49,4 +49,17 @@
         hm_dispose(hm);
         pass(cases++);
     }
+
+    {
+        OWNED Hashmap * hm = mk_hm(3, 100, dispose);
+
+        hm_ins(hm, "one", strdup_safe("A"));
+        hm_ins(hm, "two", strdup_safe("B"));
+        hm_ins(hm, "three", strdup_safe("C"));
+        hm_ins(hm, "four", strdup_safe("D"));
+        hm_ins(hm, "five", strdup_safe("E"));
+
+        hm_dispose(hm);
+        pass(cases++);
+    }
 }
