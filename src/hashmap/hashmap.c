@@ -39,10 +39,6 @@ OWNED Hashmap * hm_init(OWNED Hashmap * hm, u64 capacity, dispose_fn * cleanup)
     if (!hm)
     {
         hm = NEW(sizeof(Hashmap));
-        WARNINGF(
-                "%s(): allocating default memory space for hashmpa initialization.",
-                __func__,
-                HASHMAP_DEFAULT_CAPACITY);
     }
 
     if (EQ(capacity, 0))
@@ -161,6 +157,11 @@ void _hm_ins(BORROWED Hashmap * hm, BORROWED const char * key, arch val)
         case 3:
         {
             PANIC("%s(): failed to fit the capacity.", __func__);
+        } break;
+
+        case 4:
+        {
+            PANIC("%s(): Key " CRAYON_TO_BOLD("\"%s\"") " already exists.", __func__, key);
         } break;
 
         default:
@@ -398,6 +399,21 @@ OWNED Result * _hm_try_ins(BORROWED Hashmap * hm, BORROWED const char * key, arc
 
     u64 h   = fnv1a_hash_(key);
     u64 idx = h % capacity;
+
+    // Making sure that there is no duplicate key.
+    if (hm->Buckets[idx])
+    {
+        BORROWED HashmapEntry * bucket = hm->Buckets[idx];
+        while (bucket)
+        {
+            if (strcmp_safe(key, bucket->Key))
+            {
+                return RESULT_FAIL(4);
+            }
+            bucket = bucket->Next;
+        }
+    }
+
     hm_ins_helper_(hm->Buckets, idx, mk_hme_(key, val));
 
     hm->Size += 1;
@@ -529,6 +545,40 @@ OWNED Result * hm_try_get_size(BORROWED Hashmap * hm)
     }
 
     return RESULT_SUCCEED(hm->Size);
+}
+
+u64 hm_get_capacity(BORROWED Hashmap * hm)
+{
+    OWNED Result * result = hm_try_get_capacity(hm);
+    if (RESULT_GOOD(result))
+    {
+        return result_unwrap_owned(result, NIL);
+    }
+
+    u64 errcode = (u64) result->Failure;
+    dispose(result);
+    switch (errcode)
+    {
+        case 0:
+        {
+            PANIC("%s(): NIL hm argument.", __func__);
+        } break;
+
+        default:
+        {
+            PANIC("%s(): Unknown error.", __func__);
+        } break;
+    }
+}
+
+OWNED Result * hm_try_get_capacity(BORROWED Hashmap * hm)
+{
+    if (!hm)
+    {
+        return RESULT_FAIL(0);
+    }
+
+    return RESULT_SUCCEED(hm->Capacity);
 }
 
 static void hm_fit_(BORROWED Hashmap * hm, const u64 newCapacity)

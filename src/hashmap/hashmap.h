@@ -50,6 +50,7 @@ OWNED Hashmap * hm_init(OWNED Hashmap * hm, u64 capacity, dispose_fn * cleanup);
  * @brief       Customize a @struct {Hashmap}.
  *
  * Possible overloads:
+ * @li OWNED Dequeue * mk_hm(0)
  * @li OWNED Dequeue * mk_hm(1, u64 capacity)
  * @li OWNED Dequeue * mk_hm(2, dispose_fn * cleanup)
  * @li OWNED Dequeue * mk_hm(3, u64 capacity, dispose_fn * cleanup)
@@ -184,6 +185,22 @@ u64 hm_get_size(BORROWED Hashmap * hm);
  *
  */
 OWNED Result * hm_try_get_size(BORROWED Hashmap * hm);
+
+/**
+ * @since       07.11.2025
+ * @author      Junzhe
+ * @modified    07.11.2025
+ *
+ */
+u64 hm_get_capacity(BORROWED Hashmap * hm);
+
+/**
+ * @since       07.11.2025
+ * @author      Junzhe
+ * @modified    07.11.2025
+ *
+ */
+OWNED Result * hm_try_get_capacity(BORROWED Hashmap * hm);
 
 /**
  * @since       06.11.2025

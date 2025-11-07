@@ -9,7 +9,6 @@ OWNED Dequeue * dq_init(OWNED Dequeue * dq, u64 capacity, dispose_fn * cleanup)
 
     if (EQ(capacity, 0))
     {
-        WARNINGF("%s(): Dequeue initialized capacity is zero, default to %lu.", __func__, DEQUEUE_DEFAULT_CAPACITY);
         capacity = DEQUEUE_DEFAULT_CAPACITY;
     }
 

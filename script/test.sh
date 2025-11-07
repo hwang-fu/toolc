@@ -21,6 +21,7 @@ clang "$TEST_SRC"                                       \
     -lmemory                                            \
     -lresult                                            \
     -ldequeue                                           \
+    -lhashmap                                           \
     -lcstr                                              \
     -Wl,--end-group                                     \
     -Wl,-rpath,'$ORIGIN'                                \

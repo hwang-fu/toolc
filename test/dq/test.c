@@ -1,4 +1,6 @@
 {
+    printf("Testing module " CRAYON_TO_BOLD(CRAYON_TO_YELLOW("dq")) "...\n");
+
     u64 cases = 1;
 
     {
@@ -89,7 +91,7 @@
     }
 
     {
-        Dequeue * dq = mk_dq(3, 0, dispose);
+        Dequeue * dq = mk_dq(3, 1, dispose);
         dq_pushback(dq, strdup_safe("A"));
         dq_pushback(dq, strdup_safe("B"));
         dq_pushback(dq, strdup_safe("C"));
