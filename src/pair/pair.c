@@ -45,22 +45,22 @@ OWNED Pair * mk_pair(int mode, ...)
         {
             fst = va_arg(ap, arch);
             snd = va_arg(ap, arch);
-            cleanup1 = va_start(ap, dispose_fn*);
-            cleanup2 = va_start(ap, dispose_fn*);
+            cleanup1 = va_arg(ap, dispose_fn*);
+            cleanup2 = va_arg(ap, dispose_fn*);
         } break;
 
         case 2:
         {
             fst = va_arg(ap, arch);
             snd = va_arg(ap, arch);
-            cleanup1 = va_start(ap, dispose_fn*);
+            cleanup1 = va_arg(ap, dispose_fn*);
         } break;
 
         case 3:
         {
             fst = va_arg(ap, arch);
             snd = va_arg(ap, arch);
-            cleanup2 = va_start(ap, dispose_fn*);
+            cleanup2 = va_arg(ap, dispose_fn*);
         } break;
 
         default:
