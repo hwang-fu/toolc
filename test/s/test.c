@@ -120,4 +120,16 @@
         pass(cases++);
     }
 
+    {
+        OWNED char * s1 = mk_cstr_toupper("good");
+        ASSERT_EXPR(strcmp_safe(s1, "GOOD"));
+
+        OWNED char * s2 = mk_cstr_tolower("Hello Hey");
+        ASSERT_EXPR(strcmp_safe(s2, "hello hey"));
+
+        dispose(s1);
+        dispose(s2);
+        pass(cases++);
+    }
+
 }
