@@ -1,6 +1,7 @@
 #pragma once
 
 #include <hwangfu/generic.h>
+#include <hwangfu/memory.h>
 
 /**
  * @since       09.11.2025
@@ -21,4 +22,4 @@ u64 LeastCommonMultiple(u64 a, u64 b);
  * @author      Junzhe
  * @modified    09.11.2025
  */
-OWNED u64 * SieveEratosthenes(u64 upto);
+OWNED bool * SieveEratosthenes(u64 upto);
