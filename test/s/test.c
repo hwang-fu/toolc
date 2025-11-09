@@ -82,4 +82,10 @@
         pass(cases++);
     }
 
+    {
+        ASSERT_EXPR(cstr_ends_with("good morning", "morning"));
+        ASSERT_EXPR(cstr_ends_with_ignorecase("good morning", "MornInG"));
+        pass(cases++);
+    }
+
 }
