@@ -2,6 +2,29 @@
 
 u64 GreatestCommonDivisor(u64 a, u64 b)
 {
+    if (EQ(a, 0))
+    {
+        return b;
+    }
+
+    if (EQ(b, 0))
+    {
+        return a;
+    }
+
+    if (a < b)
+    {
+        return GreatestCommonDivisor(b, a);
+    }
+
+    while (NEQ(b, 0))
+    {
+        u64 r = a % b;
+        a = b;
+        b = r;
+    }
+
+    return a;
 }
 
 u64 LeastCommonMultiple(u64 a, u64 b)
