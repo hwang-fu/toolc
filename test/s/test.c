@@ -65,4 +65,15 @@
         dispose(s);
         pass(cases++);
     }
+
+    {
+        ASSERT_EXPR(!strcmp_safe("ABC", "abc"));
+        pass(cases++);
+    }
+
+    {
+        ASSERT_EXPR(strcmp_safe_ignorecase("ABC", "abc"));
+        pass(cases++);
+    }
+
 }
