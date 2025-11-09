@@ -16,6 +16,8 @@ u64 GreatestCommonDivisor(u64 a, u64 b);
  * @since       09.11.2025
  * @author      Junzhe
  * @modified    09.11.2025
+ *
+ * lcm(a, b) = (a * b) / gcd(a, b)
  */
 u64 LeastCommonMultiple(u64 a, u64 b);
 

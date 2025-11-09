@@ -29,6 +29,14 @@ u64 GreatestCommonDivisor(u64 a, u64 b)
 
 u64 LeastCommonMultiple(u64 a, u64 b)
 {
+    if (EQ(a, 0) || EQ(b, 0))
+    {
+        return 0;
+    }
+
+    u64 gcd = GreatestCommonDivisor(a, b);
+
+    return a / gcd * b;
 }
 
 OWNED bool * SieveEratosthenes(u64 upto)
