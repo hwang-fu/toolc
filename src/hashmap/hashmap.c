@@ -177,7 +177,7 @@ void _hm_ins_owned_key(BORROWED Hashmap * hm, OWNED char * key, arch val)
 
 arch _hm_set(BORROWED Hashmap * hm, BORROWED const char * key, arch val)
 {
-    OWNED Result * result = _hm_try_ins(hm, key, val);
+    OWNED Result * result = _hm_try_set(hm, key, val);
     if (RESULT_GOOD(result))
     {
         return result_unwrap_owned(result, NIL);
