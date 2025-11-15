@@ -59,6 +59,32 @@
         hm_ins(hm, "four", strdup_safe("D"));
         hm_ins(hm, "five", strdup_safe("E"));
 
+        ASSERT_EXPR(strcmp_safe((char*) hm_get(hm, "five"), "E"));
+        ASSERT_EXPR(strcmp_safe((char*) hm_get(hm, "four"), "D"));
+        ASSERT_EXPR(strcmp_safe((char*) hm_get(hm, "three"), "C"));
+        ASSERT_EXPR(strcmp_safe((char*) hm_get(hm, "two"), "B"));
+        ASSERT_EXPR(strcmp_safe((char*) hm_get(hm, "one"), "A"));
+
+        hm_dispose(hm);
+        pass(cases++);
+    }
+
+    {
+        OWNED Hashmap * hm = mk_hm(3, 100, dispose);
+        OWNED char * s = NIL;
+
+        hm_ins(hm, "one", strdup_safe("A"));
+
+        s = (char*) hm_set(hm, "one", strdup_safe("ONE"));
+        ASSERT_EXPR(strcmp_safe(s, "A"));
+        ASSERT_EXPR(strcmp_safe((char*) hm_get(hm, "one"), "ONE"));
+        s = dispose(s);
+
+        s = (char*) hm_set(hm, "one", strdup_safe("1"));
+        ASSERT_EXPR(strcmp_safe(s, "ONE"));
+        ASSERT_EXPR(strcmp_safe((char*) hm_get(hm, "one"), "1"));
+        s = dispose(s);
+
         hm_dispose(hm);
         pass(cases++);
     }

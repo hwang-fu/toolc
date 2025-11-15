@@ -175,6 +175,57 @@ void _hm_ins_owned_key(BORROWED Hashmap * hm, OWNED char * key, arch val)
     XFREE(key);
 }
 
+arch _hm_set(BORROWED Hashmap * hm, BORROWED const char * key, arch val)
+{
+    OWNED Result * result = _hm_try_set(hm, key, val);
+    if (RESULT_GOOD(result))
+    {
+        return result_unwrap_owned(result, NIL);
+    }
+
+    u64 errcode = result->Failure;
+    dispose(result);
+    switch (errcode)
+    {
+        case 0:
+        {
+            PANIC("%s(): hm argument is " CRAYON_TO_BOLD("NIL") ".", __func__);
+        } break;
+
+        case 1:
+        {
+            PANIC("%s(): key is " CRAYON_TO_BOLD("NIL") ".", __func__);
+        } break;
+
+        case 2:
+        {
+            PANIC("%s(): key is " CRAYON_TO_BOLD("\"\"") ".", __func__);
+        } break;
+
+        case 3:
+        {
+            PANIC("%s(): failed to fit the capacity.", __func__);
+        } break;
+
+        case 4:
+        {
+            PANIC("%s(): Key " CRAYON_TO_BOLD("\"%s\"") " does not exist yet.", __func__, key);
+        } break;
+
+        default:
+        {
+            PANIC("%s(): Unknown error code %lu.", __func__, errcode);
+        } break;
+    }
+}
+
+arch _hm_set_owned_key(BORROWED Hashmap * hm, OWNED char * key, arch val)
+{
+    arch rc = _hm_set(hm, key, val);
+    XFREE(key);
+    return rc;
+}
+
 arch hm_get(BORROWED Hashmap * hm, BORROWED const char * key)
 {
     OWNED Result * result = hm_try_get(hm, key);
@@ -422,6 +473,68 @@ OWNED Result * _hm_try_ins(BORROWED Hashmap * hm, BORROWED const char * key, arc
 OWNED Result * _hm_try_ins_owned_key(BORROWED Hashmap * hm, OWNED char * key, arch val)
 {
     OWNED Result * result = hm_try_ins(hm, key, val);
+    XFREE(key);
+    return result;
+}
+
+OWNED Result * _hm_try_set(BORROWED Hashmap * hm, BORROWED const char * key, arch val)
+{
+    if (!hm)
+    {
+        return RESULT_FAIL(0);
+    }
+
+    if (!key)
+    {
+        return RESULT_FAIL(1);
+    }
+
+    if (EQ(strlen_safe(key), 0))
+    {
+        return RESULT_FAIL(2);
+    }
+
+    u64 size     = hm->Size;
+    u64 capacity = hm->Capacity;
+    if (WATERMARK(size, capacity) >= WATERMARK_HIGH)
+    {
+        do
+        {
+            capacity += 1;
+            capacity *= 2;
+        } while (WATERMARK(size, capacity) >= WATERMARK_LOW);
+
+        if (!hm_try_fit(hm, capacity))
+        {
+            return RESULT_FAIL(3);
+        }
+    }
+
+    u64 h   = fnv1a_hash_(key);
+    u64 idx = h % capacity;
+
+    // Making sure that there is no duplicate key.
+    if (hm->Buckets[idx])
+    {
+        BORROWED HashmapEntry * bucket = hm->Buckets[idx];
+        while (bucket)
+        {
+            if (strcmp_safe(key, bucket->Key))
+            {
+                arch rc = bucket->Val;
+                bucket->Val = val;
+                return RESULT_SUCCEED(rc);
+            }
+            bucket = bucket->Next;
+        }
+    }
+
+    return RESULT_FAIL(4);
+}
+
+OWNED Result * _hm_try_set_owned_key(BORROWED Hashmap * hm, OWNED char * key, arch val)
+{
+    OWNED Result * result = _hm_try_set(hm, key, val);
     XFREE(key);
     return result;
 }

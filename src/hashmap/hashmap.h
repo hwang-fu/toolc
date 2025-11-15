@@ -17,6 +17,11 @@
 #define hm_try_ins(hm, key, val)           _hm_try_ins(hm, key, CAST(val, arch))
 #define hm_try_ins_owned_key(hm, key, val) _hm_try_ins_owned_key(hm, key, CAST(val, arch))
 
+#define hm_set(hm, key, val)               _hm_set(hm, key, CAST(val, arch))
+#define hm_set_owned_key(hm, key, val)     _hm_set_owned_key(hm, key, CAST(val, arch))
+#define hm_try_set(hm, key, val)           _hm_try_set(hm, key, CAST(val, arch))
+#define hm_try_set_owned_key(hm, key, val) _hm_try_set_owned_key(hm, key, CAST(val, arch))
+
 typedef struct Hashmap Hashmap;
 typedef struct HashmapEntry HashmapEntry;
 
@@ -73,6 +78,24 @@ void _hm_ins(BORROWED Hashmap * hm, BORROWED const char * key, arch val);
  *
  */
 void _hm_ins_owned_key(BORROWED Hashmap * hm, OWNED char * key, arch val);
+
+/**
+ * @since       15.11.2025
+ * @author      Junzhe
+ * @modified    15.11.2025
+ *
+ * @brief       Set the corresponding entry @arg {key} with @arg {val}
+ *              Returns the old value in the @arg {hm}, if no previous entry exists, abort.
+ */
+arch _hm_set(BORROWED Hashmap * hm, BORROWED const char * key, arch val);
+
+/**
+ * @since       15.11.2025
+ * @author      Junzhe
+ * @modified    15.11.2025
+ *
+ */
+arch _hm_set_owned_key(BORROWED Hashmap * hm, OWNED char * key, arch val);
 
 /**
  * @since       06.11.2025
@@ -137,6 +160,23 @@ OWNED Result * _hm_try_ins(BORROWED Hashmap * hm, BORROWED const char * key, arc
  *
  */
 OWNED Result * _hm_try_ins_owned_key(BORROWED Hashmap * hm, OWNED char * key, arch val);
+
+/**
+ * @since       15.11.2025
+ * @author      Junzhe
+ * @modified    15.11.2025
+ *
+ * @brief       Set / replace / insert the corresponding entry @arg {key} with @arg {val}
+ */
+OWNED Result * _hm_try_set(BORROWED Hashmap * hm, BORROWED const char * key, arch val);
+
+/**
+ * @since       15.11.2025
+ * @author      Junzhe
+ * @modified    15.11.2025
+ *
+ */
+OWNED Result * _hm_try_set_owned_key(BORROWED Hashmap * hm, OWNED char * key, arch val);
 
 /**
  * @since       06.11.2025
