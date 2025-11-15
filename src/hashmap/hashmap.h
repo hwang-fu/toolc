@@ -84,9 +84,10 @@ void _hm_ins_owned_key(BORROWED Hashmap * hm, OWNED char * key, arch val);
  * @author      Junzhe
  * @modified    15.11.2025
  *
- * @brief       Set / replace / insert the corresponding entry @arg {key} with @arg {val}
+ * @brief       Set the corresponding entry @arg {key} with @arg {val}
+ *              Returns the old value in the @arg {hm}, if no previous entry exists, abort.
  */
-void _hm_set(BORROWED Hashmap * hm, BORROWED const char * key, arch val);
+arch _hm_set(BORROWED Hashmap * hm, BORROWED const char * key, arch val);
 
 /**
  * @since       15.11.2025
@@ -94,7 +95,7 @@ void _hm_set(BORROWED Hashmap * hm, BORROWED const char * key, arch val);
  * @modified    15.11.2025
  *
  */
-void _hm_set_owned_key(BORROWED Hashmap * hm, OWNED char * key, arch val);
+arch _hm_set_owned_key(BORROWED Hashmap * hm, OWNED char * key, arch val);
 
 /**
  * @since       06.11.2025
@@ -165,6 +166,7 @@ OWNED Result * _hm_try_ins_owned_key(BORROWED Hashmap * hm, OWNED char * key, ar
  * @author      Junzhe
  * @modified    15.11.2025
  *
+ * @brief       Set / replace / insert the corresponding entry @arg {key} with @arg {val}
  */
 OWNED Result * _hm_try_set(BORROWED Hashmap * hm, BORROWED const char * key, arch val);
 

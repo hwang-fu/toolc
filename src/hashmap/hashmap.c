@@ -426,6 +426,68 @@ OWNED Result * _hm_try_ins_owned_key(BORROWED Hashmap * hm, OWNED char * key, ar
     return result;
 }
 
+OWNED Result * _hm_try_set(BORROWED Hashmap * hm, BORROWED const char * key, arch val)
+{
+    if (!hm)
+    {
+        return RESULT_FAIL(0);
+    }
+
+    if (!key)
+    {
+        return RESULT_FAIL(1);
+    }
+
+    if (EQ(strlen_safe(key), 0))
+    {
+        return RESULT_FAIL(2);
+    }
+
+    u64 size     = hm->Size;
+    u64 capacity = hm->Capacity;
+    if (WATERMARK(size, capacity) >= WATERMARK_HIGH)
+    {
+        do
+        {
+            capacity += 1;
+            capacity *= 2;
+        } while (WATERMARK(size, capacity) >= WATERMARK_LOW);
+
+        if (!hm_try_fit(hm, capacity))
+        {
+            return RESULT_FAIL(3);
+        }
+    }
+
+    u64 h   = fnv1a_hash_(key);
+    u64 idx = h % capacity;
+
+    // Making sure that there is no duplicate key.
+    if (hm->Buckets[idx])
+    {
+        BORROWED HashmapEntry * bucket = hm->Buckets[idx];
+        while (bucket)
+        {
+            if (strcmp_safe(key, bucket->Key))
+            {
+                arch rc = bucket->Val;
+                bucket->Val = val;
+                return RESULT_SUCCEED(rc);
+            }
+            bucket = bucket->Next;
+        }
+    }
+
+    return RESULT_FAIL(4);
+}
+
+OWNED Result * _hm_try_set_owned_key(BORROWED Hashmap * hm, OWNED char * key, arch val)
+{
+    OWNED Result * result = _hm_try_set(hm, key, val);
+    XFREE(key);
+    return result;
+}
+
 OWNED Result * hm_try_del(BORROWED Hashmap * hm, BORROWED const char * key)
 {
     if (!hm)
