@@ -9,6 +9,7 @@
 #include <hwangfu/cstr.h>
 #include <hwangfu/dequeue.h>
 #include <hwangfu/hashmap.h>
+#include <hwangfu/vector.h>
 
 static void pass(u64 nr)
 {
