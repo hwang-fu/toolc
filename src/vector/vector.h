@@ -1,5 +1,9 @@
 #pragma once
 
+#include <stdlib.h>
+#include <string.h>
+#include <stdarg.h>
+
 #include <hwangfu/generic.h>
 #include <hwangfu/assertion.h>
 #include <hwangfu/memory.h>
