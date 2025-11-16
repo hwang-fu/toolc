@@ -317,7 +317,7 @@ OWNED Result * vector_try_popback(BORROWED Vector * vec)
     arch data = item->Value;
     dispose(item);
 
-    RESULT_SUCCEED(data);
+    return RESULT_SUCCEED(data);
 }
 
 void _vector_pushfront(BORROWED Vector * vec, arch value, dispose_fn * cleanup)
