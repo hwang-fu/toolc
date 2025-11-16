@@ -10,7 +10,7 @@
 #endif // VECTOR_DEFAULT_CAPACITY
 
 typedef struct Vector Vector;
-typedef struct VectorData VectorData ;
+typedef struct VectorData VectorData;
 
 /**
  * @since       16.11.2025
@@ -44,15 +44,89 @@ OWNED Vector * vector_init(OWNED Vector * vec, u64 capacity);
  */
 OWNED Vector * mk_vector(int mode, ...);
 
+/**
+ * @since       16.11.2025
+ * @author      Junzhe
+ * @modified    16.11.2025
+ */
+arch vector_front(BORROWED Vector * vec);
 
-_vector_pushfront();
+/**
+ * @since       16.11.2025
+ * @author      Junzhe
+ * @modified    16.11.2025
+ */
+arch vector_back(BORROWED Vector * vec);
 
-_vector_pushback();
+/**
+ * @since       16.11.2025
+ * @author      Junzhe
+ * @modified    16.11.2025
+ */
+arch vector_popfront(BORROWED Vector * vec);
 
-_vector_try_pushfront();
+/**
+ * @since       16.11.2025
+ * @author      Junzhe
+ * @modified    16.11.2025
+ */
+arch vector_popback(BORROWED Vector * vec);
 
-_vector_try_pushback();
+/**
+ * @since       16.11.2025
+ * @author      Junzhe
+ * @modified    16.11.2025
+ */
+OWNED Result * vector_try_front(BORROWED Vector * vec);
 
+/**
+ * @since       16.11.2025
+ * @author      Junzhe
+ * @modified    16.11.2025
+ */
+OWNED Result * vector_try_back(BORROWED Vector * vec);
+
+/**
+ * @since       16.11.2025
+ * @author      Junzhe
+ * @modified    16.11.2025
+ */
+OWNED Result * vector_try_popfront(BORROWED Vector * vec);
+
+/**
+ * @since       16.11.2025
+ * @author      Junzhe
+ * @modified    16.11.2025
+ */
+OWNED Result * vector_try_popback(BORROWED Vector * vec);
+
+/**
+ * @since       16.11.2025
+ * @author      Junzhe
+ * @modified    16.11.2025
+ */
+void _vector_pushfront(BORROWED Vector * vec, arch value, dispose_fn * cleanup);
+
+/**
+ * @since       16.11.2025
+ * @author      Junzhe
+ * @modified    16.11.2025
+ */
+void _vector_pushback(BORROWED Vector * vec, arch value, dispose_fn * cleanup);
+
+/**
+ * @since       16.11.2025
+ * @author      Junzhe
+ * @modified    16.11.2025
+ */
+OWNED Result * _vector_try_pushfront(BORROWED Vector * vec, arch value, dispose_fn * cleanup);
+
+/**
+ * @since       16.11.2025
+ * @author      Junzhe
+ * @modified    16.11.2025
+ */
+OWNED Result * _vector_try_pushback(BORROWED Vector * vec, arch value, dispose_fn * cleanup);
 
 /**
  * @since       16.11.2025
@@ -81,6 +155,13 @@ u64 vector_get_capacity(BORROWED Vector * vec);
  * @modified    16.11.2025
  */
 OWNED Result * vector_try_get_capacity(BORROWED Vector * vec);
+
+/**
+ * @since       16.11.2025
+ * @author      Junzhe
+ * @modified    16.11.2025
+ */
+bool vector_is_empty(BORROWED Vector * vec);
 
 /**
  * @since       16.11.2025
