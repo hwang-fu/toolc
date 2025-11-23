@@ -136,3 +136,4 @@ A simple, efficient string-keyed hashmap.
 This project is released under the MIT License.
 You are free to use it in personal, academic, or commercial work.
 
+---
