@@ -133,6 +133,86 @@ static void process_(BORROWED u8 block[SHA256_BLOCK_SIZE_IN_BYTES], BORROWED u32
 
 OWNED SHA256 * mk_sha256(BORROWED void * body, u64 bytes)
 {
+    /// 1. Sanity check.
+    SCP(msg);
+    ASSERT_EXPR(bytes > 0);
+
+    /// 2. Initializations.
+    BORROWED u8 * data = cast(msg, u8*);
+    COPIED u32 H[8] = { 0 };
+    memcpy(H, H_, sizeof(H));
+
+    /// 3. Check for overflow. 0x1fffffffffffffff = 0xffffffffffffffff / 8
+    ///    The @argument {bytes} represents total bytes,
+    ///    however, later we have to also use the concept of bit length, so it is necessary to watch out for overflow.
+    ///    If overflow, then process the @argument {data} in several times.
+    u64 maximum = (u64) (0x1fffffffffffffff)  - 1;
+    while (bytes > maximum)
+    {
+        OWNED Sha256 * sha = sha256(data, maximum);
+        for (u8 i = 0; i < 8; i++)
+        {
+            H[i] = SHL32(sha->Digest[i * 4],     24)
+                 | SHL32(sha->Digest[i * 4 + 1], 16)
+                 | SHL32(sha->Digest[i * 4 + 2], 8)
+                 | (u32)(sha->Digest[i * 4 + 3]);
+        }
+        dispose(sha);
+        data  += maximum;
+        bytes -= maximum;
+    }
+
+    u64 bitLength = bytes * 8;
+
+    /// Process all full 64-byte blocks (SHA-256 block size is 64-byte).
+    u64 offset = 0;
+    while (bytes - offset >= SHA256_BLOCK_SIZE_IN_BYTES)
+    {
+        process_(data + offset, H);
+        offset += SHA256_BLOCK_SIZE_IN_BYTES;
+    }
+
+    /// Last block(s) with padding to fulfill a 64-byte block pattern.
+    u8 block[2 * SHA256_BLOCK_SIZE_IN_BYTES] = { 0 };
+    u64 rest = bytes - offset;
+    memcpy(block, data + offset, rest);
+    /// 0x80
+    block[rest] = 0b10000000;
+
+    /// If there is not enough room for 8-byte length, we'll need two blocks.
+    if (SHA256_BLOCK_SIZE_IN_BYTES - (rest + 1) < 8)
+    {
+        /// Fill remaining of the first block with zeros (we have initialized already).
+        /// Write second block to all zeros except final 8 bytes length.
+        /// The final 8 bytes will be the @local {bitLength} in big-endian.
+        for (u8 i = 0; i < 8; i++)
+        {
+            block[2 * SHA256_BLOCK_SIZE_IN_BYTES - 8 + i] = (u8) SHR64(bitLength, ((SHA256_BLOCK_SIZE_IN_BYTES - 8) - (8 * i)));
+        }
+        process_(block, H);
+        process_(block + SHA256_BLOCK_SIZE_IN_BYTES, H);
+    }
+    else
+    {
+        /// Fill zeros until the last 8 bytes.
+        /// The final 8 bytes will be the @local {bitLength} in big-endian.
+        for (u8 i = 0; i < 8; i++)
+        {
+            block[SHA256_BLOCK_SIZE_IN_BYTES - 8 + i] = (u8) SHR64(bitLength, ((SHA256_BLOCK_SIZE_IN_BYTES - 8) - (8 * i)));
+        }
+        process_(block, H);
+    }
+
+    /// Process output in big-endian.
+    OWNED Sha256 * sha = new(sizeof(Sha256));
+    for (u8 i = 0; i < 8; i++)
+    {
+        sha->Digest[i * 4]     = (u8) SHR32(H[i], 24);
+        sha->Digest[i * 4 + 1] = (u8) SHR32(H[i], 16);
+        sha->Digest[i * 4 + 2] = (u8) SHR32(H[i], 8);
+        sha->Digest[i * 4 + 3] = (u8) H[i];
+    }
+    return sha;
 }
 
 OWNED char * sha256_cstring(BORROWED SHA256 * h)
