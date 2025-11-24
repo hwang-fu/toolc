@@ -1,6 +1,12 @@
 #pragma once
 
+#include <stdlib.h>
+#include <string.h>
+
 #include <hwangfu/generic.h>
+#include <hwangfu/memory.h>
+#include <hwangfu/assertion.h>
+#include <hwangfu/cstr.h>
 
 typedef struct SHA256 SHA256;
 
