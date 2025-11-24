@@ -1,6 +1,5 @@
 #include "crypto.h"
 
-
 #define SHA256_BLOCK_SIZE_IN_BYTES      (64)
 
 // Choose(x, y, z)
@@ -78,6 +77,58 @@ static const u32 H_[8] = {
     0x1f83d9ab,
     0x5be0cd19
 };
+
+/// Convert 4 @type {u8} to a big-endian @type {u32}
+u32 bigendian32(BORROWED u8 * p)
+{
+    scp(p);
+    return SHL32(p[0], 24) | SHL32(p[1], 16) | SHL32(p[2], 8) | (u32)p[3];
+}
+
+static void process_(BORROWED u8 block[SHA256_BLOCK_SIZE_IN_BYTES], BORROWED u32 H[8])
+{
+    u32 W[64];
+    for (u8 t = 0; t < 16; t++)
+    {
+        W[t] = bigendian32(block + t * 4);
+    }
+    for (u8 t = 16; t < 64; t++)
+    {
+        W[t] = SmallSigma1(W[t-2]) + W[t-7] + SmallSigma0(W[t-15]) + W[t-16];
+    }
+
+    u32 a = H[0];
+    u32 b = H[1];
+    u32 c = H[2];
+    u32 d = H[3];
+    u32 e = H[4];
+    u32 f = H[5];
+    u32 g = H[6];
+    u32 h = H[7];
+
+    for (u8 t = 0; t < 64; t++)
+    {
+        const u32 T1 = h + BigSigma1(e) + Choose(e, f, g) + K_[t] + W[t];
+        const u32 T2 = BigSigma0(a) + Majority(a, b, c);
+        h = g;
+        g = f;
+        f = e;
+        e = d + T1;
+        d = c;
+        c = b;
+        b = a;
+        a = T1 + T2;
+    }
+
+    H[0] += a;
+    H[1] += b;
+    H[2] += c;
+    H[3] += d;
+    H[4] += e;
+    H[5] += f;
+    H[6] += g;
+    H[7] += h;
+}
 
 
 OWNED SHA256 * mk_sha256(BORROWED void * body, u64 bytes)
