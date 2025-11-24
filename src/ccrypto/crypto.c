@@ -34,7 +34,7 @@ static u32 BigSigma1(u32 x)
 }
 
 // Used in the message schedule (W[t]) expansion.
-// It mixes earlier message words together to generate new words.
+// It mixes earlier message words together to generate NEW words.
 // This makes every later round depend on earlier message bits in a complex way.
 static u32 SmallSigma0(u32 x)
 {
@@ -90,14 +90,14 @@ static char xdigit_(u8 d)
     }
     else
     {
-        panic("Error @%s(): Expecting a number in range [0, 15], but got \"%u\"", __func__, d);
+        PANIC("Error @%s(): Expecting a number in range [0, 15], but got \"%u\"", __func__, d);
     }
 }
 
 /// Convert 4 @type {u8} to a big-endian @type {u32}
 u32 bigendian32(BORROWED u8 * p)
 {
-    scp(p);
+    SCP(p);
     return SHL32(p[0], 24) | SHL32(p[1], 16) | SHL32(p[2], 8) | (u32)p[3];
 }
 
@@ -150,11 +150,11 @@ static void process_(BORROWED u8 block[SHA256_BLOCK_SIZE_IN_BYTES], BORROWED u32
 OWNED SHA256 * mk_sha256(BORROWED void * body, u64 bytes)
 {
     /// 1. Sanity check.
-    SCP(msg);
+    SCP(body);
     ASSERT_EXPR(bytes > 0);
 
     /// 2. Initializations.
-    BORROWED u8 * data = cast(msg, u8*);
+    BORROWED u8 * data = CAST(body, u8*);
     COPIED u32 H[8] = { 0 };
     memcpy(H, H_, sizeof(H));
 
@@ -165,7 +165,7 @@ OWNED SHA256 * mk_sha256(BORROWED void * body, u64 bytes)
     u64 maximum = (u64) (0x1fffffffffffffff)  - 1;
     while (bytes > maximum)
     {
-        OWNED Sha256 * sha = sha256(data, maximum);
+        OWNED SHA256 * sha = mk_sha256(data, maximum);
         for (u8 i = 0; i < 8; i++)
         {
             H[i] = SHL32(sha->Digest[i * 4],     24)
@@ -198,8 +198,8 @@ OWNED SHA256 * mk_sha256(BORROWED void * body, u64 bytes)
     /// If there is not enough room for 8-byte length, we'll need two blocks.
     if (SHA256_BLOCK_SIZE_IN_BYTES - (rest + 1) < 8)
     {
-        /// Fill remaining of the first block with zeros (we have initialized already).
-        /// Write second block to all zeros except final 8 bytes length.
+        /// Fill remaining of the first block with ZEROS (we have initialized already).
+        /// Write second block to all ZEROS except final 8 bytes length.
         /// The final 8 bytes will be the @local {bitLength} in big-endian.
         for (u8 i = 0; i < 8; i++)
         {
@@ -210,7 +210,7 @@ OWNED SHA256 * mk_sha256(BORROWED void * body, u64 bytes)
     }
     else
     {
-        /// Fill zeros until the last 8 bytes.
+        /// Fill ZEROS until the last 8 bytes.
         /// The final 8 bytes will be the @local {bitLength} in big-endian.
         for (u8 i = 0; i < 8; i++)
         {
@@ -220,7 +220,7 @@ OWNED SHA256 * mk_sha256(BORROWED void * body, u64 bytes)
     }
 
     /// Process output in big-endian.
-    OWNED Sha256 * sha = new(sizeof(Sha256));
+    OWNED SHA256 * sha = NEW(sizeof(SHA256));
     for (u8 i = 0; i < 8; i++)
     {
         sha->Digest[i * 4]     = (u8) SHR32(H[i], 24);
@@ -236,7 +236,7 @@ OWNED char * sha256_cstring(BORROWED SHA256 * h)
     /// 1. Sanity check.
     SCP(h);
     /// 2. SHA-256 hex string is always 64 bytes (characters) long, excluding the '\0' terminator.
-    OWNED char * digest = zeros(64 + 1);
+    OWNED char * digest = ZEROS(64 + 1);
     /// 3. Convert.
     for (u8 i = 0; i < 32; i++)
     {
@@ -250,7 +250,7 @@ OWNED char * sha256_cstring(BORROWED SHA256 * h)
 
 OWNED char * sha256_cstring_owned(OWNED SHA256 * h)
 {
-    OWNED char * digest = sha256_digest(h);
+    OWNED char * digest = sha256_cstring(h);
     dispose(h);
     return digest;
 }
