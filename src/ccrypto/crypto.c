@@ -78,6 +78,22 @@ static const u32 H_[8] = {
     0x5be0cd19
 };
 
+static char xdigit_(u8 d)
+{
+    if (0 <= d && d <= 9)
+    {
+        return '0' + d;
+    }
+    else if (10 <= d && d <= 15)
+    {
+        return 'a' + (d - 10);
+    }
+    else
+    {
+        panic("Error @%s(): Expecting a number in range [0, 15], but got \"%u\"", __func__, d);
+    }
+}
+
 /// Convert 4 @type {u8} to a big-endian @type {u32}
 u32 bigendian32(BORROWED u8 * p)
 {
@@ -217,12 +233,33 @@ OWNED SHA256 * mk_sha256(BORROWED void * body, u64 bytes)
 
 OWNED char * sha256_cstring(BORROWED SHA256 * h)
 {
+    /// 1. Sanity check.
+    SCP(h);
+    /// 2. SHA-256 hex string is always 64 bytes (characters) long, excluding the '\0' terminator.
+    OWNED char * digest = zeros(64 + 1);
+    /// 3. Convert.
+    for (u8 i = 0; i < 32; i++)
+    {
+        u8 b = h->Digest[i];
+        digest[i * 2]     = xdigit_((u8)((b >> 4) & 0x0f));
+        digest[i * 2 + 1] = xdigit_((u8)(b        & 0x0f));
+    }
+    /// 4. Return the converted value.
+    return digest;
 }
 
 OWNED char * sha256_cstring_owned(OWNED SHA256 * h)
 {
+    OWNED char * digest = sha256_digest(h);
+    dispose(h);
+    return digest;
 }
 
 OWNED char * sha256_display(FILE * stream, BORROWED SHA256 * h)
 {
+    SCP(h);
+    for (int i = 0; i < 32; ++i)
+    {
+        fprintf(stream, "%02x\n", h->Digest[i]);
+    }
 }
